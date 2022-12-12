@@ -21,8 +21,12 @@ public class CommentService {
 
     @Transactional
     public GenericResponseDto<ResponseCreateCommentDto> createComment(Long postId, RequestCreateCommentDto requestCreateCommentDto){
+        System.out.println(requestCreateCommentDto.getContent());
         Comment newComment = commentMapper.toDepthZeroComment(postId, requestCreateCommentDto, 0L);
-        postingRepository.findById(postId).orElseThrow(() -> new NullPointerException("게시글이 존재하지 않습니다."));
+
+        postingRepository.findById(postId)
+                .orElseThrow(() -> new NullPointerException("게시글이 존재하지 않습니다."));
+
         commentRepository.save(newComment);
 
         return commentMapper.toResponse(newComment);

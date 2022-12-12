@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/posts/comments")
+@RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/{postId}")
+    @PostMapping("/{postId}/comments")
     public GenericResponseDto<ResponseCreateCommentDto> createComment(@PathVariable Long postId, @RequestBody RequestCreateCommentDto requestCreateCommentDto){
+        System.out.println();
         return commentService.createComment(postId, requestCreateCommentDto);
 
     }
