@@ -2,8 +2,8 @@ package com.hanghae.blog.api.posting.controller;
 
 
 import com.hanghae.blog.api.common.response.GenericResponseDto;
-import com.hanghae.blog.api.posting.dto.RequestCreatePostingDto;
-import com.hanghae.blog.api.posting.dto.ResponseCreatePostingDto;
+import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
+import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
 import com.hanghae.blog.api.posting.service.PostingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class PostingController {
     private final PostingService postingService;
 
     @PostMapping
-    public GenericResponseDto<ResponseCreatePostingDto> createPosting(@RequestBody RequestCreatePostingDto requestDto) {
+    public GenericResponseDto<ResponseCreatePosting> createPosting(@RequestBody RequestCreatePosting requestDto) {
         return postingService.create(requestDto);
     }
 
