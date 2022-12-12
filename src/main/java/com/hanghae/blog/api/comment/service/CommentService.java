@@ -5,7 +5,7 @@ import com.hanghae.blog.api.comment.dto.ResponseCreateCommentDto;
 import com.hanghae.blog.api.comment.entity.Comment;
 import com.hanghae.blog.api.comment.mapper.CommentMapper;
 import com.hanghae.blog.api.comment.repository.CommentRepository;
-import com.hanghae.blog.api.common.response.GenericResponseDto;
+import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public GenericResponseDto<ResponseCreateCommentDto> createComment(Long postId, RequestCreateCommentDto requestCreateCommentDto){
+    public DataResponse<ResponseCreateCommentDto> createComment(Long postId, RequestCreateCommentDto requestCreateCommentDto){
         System.out.println(requestCreateCommentDto.getContent());
         Comment newComment = commentMapper.toDepthZeroComment(postId, requestCreateCommentDto, 0L);
 
