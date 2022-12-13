@@ -1,8 +1,8 @@
-package com.hanghae.blog.api.User.mapper;
+package com.hanghae.blog.api.user.mapper;
 
-import com.hanghae.blog.api.User.dto.RequestCreateUser;
-import com.hanghae.blog.api.User.entity.User;
-import com.hanghae.blog.api.User.entity.UserRoleEnum;
+import com.hanghae.blog.api.user.dto.RequestCreateUser;
+import com.hanghae.blog.api.user.entity.User;
+import com.hanghae.blog.api.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

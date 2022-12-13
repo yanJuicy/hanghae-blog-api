@@ -1,4 +1,4 @@
-package com.hanghae.blog.api.User.entity;
+package com.hanghae.blog.api.user.entity;
 
 import com.hanghae.blog.api.common.entity.Timestamped;
 import lombok.Getter;

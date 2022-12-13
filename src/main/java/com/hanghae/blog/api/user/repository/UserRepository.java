@@ -1,6 +1,6 @@
-package com.hanghae.blog.api.User.repository;
+package com.hanghae.blog.api.user.repository;
 
-import com.hanghae.blog.api.User.entity.User;
+import com.hanghae.blog.api.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
