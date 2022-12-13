@@ -16,12 +16,12 @@ import static com.hanghae.blog.api.common.response.ResponseMessage.CREATE_COMMEN
 import static com.hanghae.blog.api.common.response.ResponseMessage.UPDATE_COMMENT_SUCCESS_MSG;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/posts/{postId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/{postId}/comments")
+    @PostMapping()
     public DataResponse<ResponseComment> createComment(@PathVariable Long postId, @RequestBody RequestComment requestComment){
         ResponseComment response = commentService.createComment(postId, requestComment);
 
@@ -29,7 +29,7 @@ public class CommentController {
 
     }
 
-    @PutMapping("/comments/{commentId}")
+    @PutMapping("/{commentId}")
     public DataResponse<ResponseComment> updateComment(@PathVariable Long commentId, @RequestBody RequestComment requestComment){
         ResponseComment response = commentService.updateComment(commentId, requestComment);
         return new DataResponse<>(UPDATE_COMMENT_SUCCESS_MSG, response);
