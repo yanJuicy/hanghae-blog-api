@@ -6,7 +6,6 @@ import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
 
-
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
 import com.hanghae.blog.api.posting.repository.PostingRepository;

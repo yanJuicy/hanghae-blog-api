@@ -1,7 +1,6 @@
 package com.hanghae.blog.api.posting.controller;
 
 
-
 import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
