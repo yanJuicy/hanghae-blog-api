@@ -4,10 +4,8 @@ package com.hanghae.blog.api.posting.controller;
 import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
-
 import com.hanghae.blog.api.posting.service.PostingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
