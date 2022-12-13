@@ -1,19 +1,19 @@
-package com.hanghae.blog.api.common.response;
+package com.hanghae.blog.api.common.exception;
 
 import lombok.Getter;
 
 @Getter
-public class Response {
+public class ExceptionResponse {
 
     private String msg;
     private int statusCode;
 
-    public Response(ResponseMessage exceptionMessage) {
+    public ExceptionResponse(ExceptionMessage exceptionMessage) {
         this.msg = exceptionMessage.getMsg();
         this.statusCode = exceptionMessage.getStatus();
     }
 
-    public Response(String msg, int statusCode) {
+    public ExceptionResponse(String msg, int statusCode) {
         this.msg = msg;
         this.statusCode = statusCode;
     }
