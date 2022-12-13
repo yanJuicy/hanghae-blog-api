@@ -1,7 +1,7 @@
 package com.hanghae.blog.api.comment.exception;
 
 import com.hanghae.blog.api.comment.controller.CommentController;
-import com.hanghae.blog.api.common.exception.ExceptionResponse;
+import com.hanghae.blog.api.common.response.Response;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -15,8 +15,8 @@ public class CommentExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NullPointerException.class)
-    public ExceptionResponse handleNullPointer(Exception e){
-        return new ExceptionResponse(e.getMessage(), HttpStatus.NOT_FOUND.value());
+    public Response handleNullPointer(Exception e){
+        return new Response(e.getMessage(), HttpStatus.NOT_FOUND.value());
     }
 
 }

@@ -4,7 +4,7 @@ import com.hanghae.blog.api.common.exception.ExceptionMessage;
 import lombok.Getter;
 
 @Getter
-public abstract class Response {
+public class Response {
 
     private String msg;
     private int statusCode;
