@@ -4,6 +4,16 @@ PR이 다음 사항을 만족하는지 확인해주세요.
 <!-- 
 체크하려면 괄호 안에 "x"를 입력하세요. 
 각 규칙은 Convention 문서에 있습니다.
+PR 제목에 쓰는 prefix는 다음과 같습니다.
+🚀 Release
+🐛 Fix
+✨ Feat
+📝 Doc
+♻️ Refactor
+🔧 Chore
+⏪️ Revert
+🧪 Test
+🎉 Init
 -->
 
 - [ ] 커밋 제목 규칙
