@@ -1,8 +1,8 @@
-package com.hanghae.blog.api.User.contorller;
+package com.hanghae.blog.api.user.contorller;
 
-import com.hanghae.blog.api.User.dto.RequestCreateUser;
-import com.hanghae.blog.api.User.dto.RequestFindUser;
-import com.hanghae.blog.api.User.service.UserService;
+import com.hanghae.blog.api.user.dto.RequestCreateUser;
+import com.hanghae.blog.api.user.dto.RequestFindUser;
+import com.hanghae.blog.api.user.service.UserService;
 import com.hanghae.blog.api.common.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

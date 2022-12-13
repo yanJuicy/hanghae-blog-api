@@ -1,4 +1,4 @@
-package com.hanghae.blog.api.User.entity;
+package com.hanghae.blog.api.user.entity;
 
 public enum UserRoleEnum {
     USER,  // 사용자 권한

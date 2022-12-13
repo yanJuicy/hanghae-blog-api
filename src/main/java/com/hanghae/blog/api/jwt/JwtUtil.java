@@ -1,6 +1,6 @@
 package com.hanghae.blog.api.jwt;
 
-import com.hanghae.blog.api.User.entity.UserRoleEnum;
+import com.hanghae.blog.api.user.entity.UserRoleEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
