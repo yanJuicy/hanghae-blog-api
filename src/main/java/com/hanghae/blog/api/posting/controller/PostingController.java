@@ -1,7 +1,7 @@
 package com.hanghae.blog.api.posting.controller;
 
 
-import com.hanghae.blog.api.common.response.GenericResponseDto;
+import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePostingDto;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePostingDto;
 import com.hanghae.blog.api.posting.service.PostingService;
@@ -20,7 +20,7 @@ public class PostingController {
     private final PostingService postingService;
 
     @PostMapping
-    public GenericResponseDto<ResponseCreatePostingDto> createPosting(@RequestBody RequestCreatePostingDto requestDto) {
+    public DataResponse<ResponseCreatePostingDto> createPosting(@RequestBody RequestCreatePostingDto requestDto) {
         return postingService.create(requestDto);
     }
 

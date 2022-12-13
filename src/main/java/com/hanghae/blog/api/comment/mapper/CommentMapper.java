@@ -3,7 +3,7 @@ package com.hanghae.blog.api.comment.mapper;
 import com.hanghae.blog.api.comment.dto.RequestCreateCommentDto;
 import com.hanghae.blog.api.comment.dto.ResponseCreateCommentDto;
 import com.hanghae.blog.api.comment.entity.Comment;
-import com.hanghae.blog.api.common.response.GenericResponseDto;
+import com.hanghae.blog.api.common.response.DataResponse;
 import org.springframework.stereotype.Component;
 
 import static com.hanghae.blog.api.common.response.ResponseMessage.CREATE_COMMENT_SUCCESS_MSG;
@@ -11,7 +11,7 @@ import static com.hanghae.blog.api.common.response.ResponseMessage.CREATE_COMMEN
 @Component
 public class CommentMapper {
 
-    public GenericResponseDto<ResponseCreateCommentDto> toResponse(Comment comment) {
+    public DataResponse<ResponseCreateCommentDto> toResponse(Comment comment) {
         ResponseCreateCommentDto response = ResponseCreateCommentDto.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
@@ -20,7 +20,7 @@ public class CommentMapper {
                 .like(comment.getLikeCount())
                 .build();
 
-        return new GenericResponseDto<>(CREATE_COMMENT_SUCCESS_MSG, response);
+        return new DataResponse<>(CREATE_COMMENT_SUCCESS_MSG, response);
     }
 
     public Comment toDepthZeroComment(Long postId, RequestCreateCommentDto requestCreateCommentDto, Long likeCount){
