@@ -1,6 +1,5 @@
 package com.hanghae.blog.api.posting.mapper;
 
-
 import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
@@ -12,7 +11,6 @@ import static com.hanghae.blog.api.common.response.ResponseMessage.CREATE_POSTIN
 
 @Component
 public class PostingMapper {
-
 
     public DataResponse<ResponseCreatePosting> toResponse(Posting posting) {
         ResponseCreatePosting response = ResponseCreatePosting.builder()
@@ -27,7 +25,14 @@ public class PostingMapper {
     }
 
     public ResponsePosting toResponsePosting(Posting posting) {
-        return new ResponsePosting(posting.getId(), posting.getTitle(), posting.getWriter(), posting.getContents());
+        return ResponsePosting.builder()
+                .id(posting.getId())
+                .title(posting.getTitle())
+                .writer(posting.getWriter())
+                .contents(posting.getContents())
+                .createdAt(posting.getCreatedAt())
+                .lastModifiedAt(posting.getLastModifiedAt())
+                .build();
     }
 
 
