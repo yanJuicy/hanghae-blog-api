@@ -25,7 +25,6 @@ public class PostingController {
     private final PostingService postingService;
     //게시글 등록
     @PostMapping
-
     public DataResponse<ResponseCreatePosting> createPosting(@RequestBody RequestCreatePosting requestDto) {
 
         return postingService.create(requestDto);
