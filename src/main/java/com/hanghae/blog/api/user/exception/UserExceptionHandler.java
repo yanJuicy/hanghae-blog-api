@@ -1,7 +1,7 @@
-package com.hanghae.blog.api.User.exception;
+package com.hanghae.blog.api.user.exception;
 
 
-import com.hanghae.blog.api.User.contorller.UserController;
+import com.hanghae.blog.api.user.contorller.UserController;
 import com.hanghae.blog.api.common.exception.ExceptionResponse;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

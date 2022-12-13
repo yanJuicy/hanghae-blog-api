@@ -1,10 +1,10 @@
-package com.hanghae.blog.api.User.service;
+package com.hanghae.blog.api.user.service;
 
-import com.hanghae.blog.api.User.dto.RequestCreateUser;
-import com.hanghae.blog.api.User.dto.RequestFindUser;
-import com.hanghae.blog.api.User.entity.User;
-import com.hanghae.blog.api.User.mapper.UserMapper;
-import com.hanghae.blog.api.User.repository.UserRepository;
+import com.hanghae.blog.api.user.dto.RequestCreateUser;
+import com.hanghae.blog.api.user.dto.RequestFindUser;
+import com.hanghae.blog.api.user.entity.User;
+import com.hanghae.blog.api.user.mapper.UserMapper;
+import com.hanghae.blog.api.user.repository.UserRepository;
 import com.hanghae.blog.api.common.response.Response;
 import com.hanghae.blog.api.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
