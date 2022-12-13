@@ -4,6 +4,7 @@ package com.hanghae.blog.api.posting.mapper;
 import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
+import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,11 @@ public class PostingMapper {
 
         return new DataResponse<>(CREATE_POSTING_SUCCESS_MSG, response);
     }
+
+    public ResponsePosting toResponsePosting(Posting posting) {
+        return new ResponsePosting(posting.getId(), posting.getTitle(), posting.getWriter(), posting.getContents());
+    }
+
 
     public Posting toPosting(RequestCreatePosting requestDto) {
         return new Posting(requestDto.getTitle(),

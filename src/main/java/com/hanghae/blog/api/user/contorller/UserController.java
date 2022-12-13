@@ -1,7 +1,8 @@
-package com.hanghae.blog.api.User.contorller;
+package com.hanghae.blog.api.user.contorller;
 
-import com.hanghae.blog.api.User.dto.RequestCreateUser;
-import com.hanghae.blog.api.User.service.UserService;
+import com.hanghae.blog.api.user.dto.RequestCreateUser;
+import com.hanghae.blog.api.user.dto.RequestFindUser;
+import com.hanghae.blog.api.user.service.UserService;
 import com.hanghae.blog.api.common.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -22,5 +24,8 @@ public class UserController {
         return userService.signup(requestCreateUser);
     }
 
-
+    @PostMapping("/login")
+    public Response login(RequestFindUser requestFindUser, HttpServletResponse response) {
+        return userService.login(requestFindUser, response);
+    }
 }
