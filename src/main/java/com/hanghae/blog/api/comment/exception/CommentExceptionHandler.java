@@ -19,4 +19,10 @@ public class CommentExceptionHandler {
         return new ExceptionResponse(e.getMessage(), HttpStatus.NOT_FOUND.value());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ExceptionResponse handleBadRequest(Exception e){
+        return new ExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+    }
+
 }

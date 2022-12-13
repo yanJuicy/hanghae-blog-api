@@ -42,4 +42,11 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private int cDepth;
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+
+
+
 }
