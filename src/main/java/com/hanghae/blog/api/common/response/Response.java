@@ -8,9 +8,9 @@ public class Response {
     private String msg;
     private int statusCode;
 
-    public Response(ResponseMessage exceptionMessage) {
-        this.msg = exceptionMessage.getMsg();
-        this.statusCode = exceptionMessage.getStatus();
+    public Response(ResponseMessage responseMessage) {
+        this.msg = responseMessage.getMsg();
+        this.statusCode = responseMessage.getStatus();
     }
 
     public Response(String msg, int statusCode) {
