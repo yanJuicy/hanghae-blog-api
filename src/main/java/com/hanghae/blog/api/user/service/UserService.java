@@ -38,7 +38,7 @@ public class UserService {
         return new Response(SIGNUP_USER_SUCCESS_MSG);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Response login(RequestFindUser requestFindUser, HttpServletResponse response) {
         User user=userRepository.findByUsername(requestFindUser.getUsername()).orElseThrow(
                 ()->new IllegalArgumentException("회원을 찾을 수 없습니다!")
