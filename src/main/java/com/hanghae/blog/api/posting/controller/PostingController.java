@@ -1,11 +1,10 @@
 package com.hanghae.blog.api.posting.controller;
 
-
 import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
-import com.hanghae.blog.api.posting.dto.RequestPageFindPosting;
+import com.hanghae.blog.api.posting.dto.RequestPagePosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
-import com.hanghae.blog.api.posting.dto.ResponsePageFindPosting;
+import com.hanghae.blog.api.common.response.PageResponse;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.service.PostingService;
@@ -39,7 +38,7 @@ public class PostingController {
     }
 
     @GetMapping("/list")
-    public ResponsePageFindPosting<ResponsePosting, Posting> findPagePosting(RequestPageFindPosting requestDto) {
+    public PageResponse<ResponsePosting, Posting> findPagePosting(RequestPagePosting requestDto) {
         return postingService.findPagePosting(requestDto);
     }
 
