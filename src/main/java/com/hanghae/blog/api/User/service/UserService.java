@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
+import static com.hanghae.blog.api.common.response.ResponseMessage.LOGIN_USER_SUCCESS_MSG;
 import static com.hanghae.blog.api.common.response.ResponseMessage.SIGNUP_USER_SUCCESS_MSG;
 
 @Service
