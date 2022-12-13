@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.hanghae.blog.api.common.response.ResponseMessage.SIGNUP_USER_SUCCESS_MSG;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -28,6 +30,6 @@ public class UserService {
         }
 
         userRepository.save(user);
-        return userMapper.toResponse();
+        return new Response(SIGNUP_USER_SUCCESS_MSG);
     }
 }
