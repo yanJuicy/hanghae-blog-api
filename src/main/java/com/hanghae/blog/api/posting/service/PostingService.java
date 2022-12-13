@@ -1,20 +1,25 @@
 package com.hanghae.blog.api.posting.service;
 
 
-import com.fasterxml.jackson.databind.DatabindException;
 import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
+import com.hanghae.blog.api.posting.dto.RequestPageFindPosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
-
+import com.hanghae.blog.api.posting.dto.ResponsePageFindPosting;
+import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
 import com.hanghae.blog.api.posting.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +52,12 @@ public class PostingService {
     }
 
 
+    public ResponsePageFindPosting<ResponsePosting, Posting> findPagePosting(RequestPageFindPosting requestDto) {
+        Pageable pageable = requestDto.getPageable(Sort.by("id"));
+        Page<Posting> result = postingRepository.findAll(pageable);
+        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponsePosting(p);
 
+        return new ResponsePageFindPosting<>(result, fn);
+    }
 
 }

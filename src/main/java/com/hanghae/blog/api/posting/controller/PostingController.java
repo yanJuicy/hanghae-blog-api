@@ -3,11 +3,13 @@ package com.hanghae.blog.api.posting.controller;
 
 import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
+import com.hanghae.blog.api.posting.dto.RequestPageFindPosting;
 import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
-
+import com.hanghae.blog.api.posting.dto.ResponsePageFindPosting;
+import com.hanghae.blog.api.posting.dto.ResponsePosting;
+import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.service.PostingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,5 +38,9 @@ public class PostingController {
         return postingService.findAllPosting();
     }
 
+    @GetMapping("/list")
+    public ResponsePageFindPosting<ResponsePosting, Posting> findPagePosting(RequestPageFindPosting requestDto) {
+        return postingService.findPagePosting(requestDto);
+    }
 
 }
