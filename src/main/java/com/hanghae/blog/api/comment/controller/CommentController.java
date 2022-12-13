@@ -4,7 +4,10 @@ import com.hanghae.blog.api.comment.dto.RequestComment;
 import com.hanghae.blog.api.comment.dto.ResponseComment;
 import com.hanghae.blog.api.comment.service.CommentService;
 import com.hanghae.blog.api.common.response.DataResponse;
+import com.hanghae.blog.api.common.response.Response;
+import com.hanghae.blog.api.common.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,4 +38,9 @@ public class CommentController {
         return new DataResponse<>(UPDATE_COMMENT_SUCCESS_MSG, response);
     }
 
+    @DeleteMapping("/{commentId}")
+    public Response deleteComment(@PathVariable Long commentId){
+        ResponseMessage responseMessage = commentService.deleteComment(commentId);
+        return new Response(responseMessage);
+    }
 }
