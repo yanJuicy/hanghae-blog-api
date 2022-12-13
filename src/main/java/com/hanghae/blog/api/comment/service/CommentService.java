@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_COMMENT_EXCEPTION_MSG;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -35,7 +37,7 @@ public class CommentService {
     public ResponseComment updateComment(Long commentId, RequestComment requestComment){
 
         Comment commentFind = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
 
         String updateComment = requestComment.getContent();
         commentFind.updateContent(updateComment);
