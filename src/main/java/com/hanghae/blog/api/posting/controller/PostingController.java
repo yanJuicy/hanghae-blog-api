@@ -44,7 +44,7 @@ public class PostingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseCreatePosting findOnePosting(@PathVariable Long id){
+    public RequestCreatePosting findOnePosting(@PathVariable Long id){
         return postingService.findOnePosting(id);
     }
 
