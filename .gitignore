@@ -39,5 +39,6 @@ out/
 gradle
 gradlew
 gradlew.bat
+src/main/resources/application-token_time.properties
 src/main/resources/application-admin.properties
 src/main/resources/application-jwt.properties

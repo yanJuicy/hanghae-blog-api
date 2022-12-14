@@ -1,8 +1,10 @@
 package com.hanghae.blog.api.common.response;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Response {
 
     private String msg;
