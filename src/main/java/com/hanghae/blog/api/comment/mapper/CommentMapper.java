@@ -16,6 +16,8 @@ public class CommentMapper {
                 .username(comment.getUsername())
                 .createdAt(comment.getCreatedAt())
                 .like(comment.getLikeCount())
+                .cDepth(comment.getCDepth())
+                .commentId(comment.getCommentId())
                 .build();
     }
 
