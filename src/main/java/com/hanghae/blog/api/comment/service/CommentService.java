@@ -68,12 +68,12 @@ public class CommentService {
                 .orElseThrow(() -> new NullPointerException("게시글이 존재하지 않습니다."));
 
         Comment newNestedComment;
-        Optional<Integer> maxCDepty = commentRepository.findWithComment(commentId);
+        Optional<Integer> maxCDepth = commentRepository.findWithComment(commentId);
 
-        if(maxCDepty.isEmpty()){
+        if(maxCDepth.isEmpty()){
              newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, 1);
         }else{
-            newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, maxCDepty.get() + 1);
+            newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, maxCDepth.get() + 1);
         }
 
         commentRepository.save(newNestedComment);
