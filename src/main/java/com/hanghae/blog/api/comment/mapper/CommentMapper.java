@@ -9,15 +9,14 @@ import org.springframework.stereotype.Component;
 public class CommentMapper {
 
     public ResponseComment toResponse(Comment comment) {
-
         return ResponseComment.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
                 .username(comment.getUsername())
                 .createdAt(comment.getCreatedAt())
                 .like(comment.getLikeCount())
-                .cDepth(comment.getCDepth())
-                .commentId(comment.getCommentId())
+                .commentDepth(comment.getCommentDepth())
+                .commentGroup(comment.getCommentGroup())
                 .build();
     }
 
@@ -27,18 +26,18 @@ public class CommentMapper {
                 .username("test")
                 .postId(postId)
                 .likeCount(likeCount)
-                .cDepth(0)
+                .commentDepth(0)
                 .build();
     }
 
-    public Comment toNestedComment(Long postId, RequestComment requestComment, Long likeCount, Long commentId, int cDepth){
+    public Comment toNestedComment(Long postId, RequestComment requestComment, Long likeCount, Long commentId, int commentDepth){
         return Comment.builder()
                 .content(requestComment.getContent())
                 .username("test")
                 .postId(postId)
                 .likeCount(likeCount)
-                .cDepth(cDepth)
-                .commentId(commentId)
+                .commentDepth(commentDepth)
+                .commentGroup(commentId)
                 .build();
     }
 

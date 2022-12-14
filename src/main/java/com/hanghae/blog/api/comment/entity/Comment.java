@@ -43,14 +43,14 @@ public class Comment extends Timestamped {
     private Long postId;
 
     @Column(nullable = false)
-    private int cDepth;
+    private int commentDepth;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    private Comment comment;
 
-    private Long commentId;
+    private Long commentGroup;
 
-    @OneToMany(mappedBy ="commentId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy ="commentGroup", fetch = FetchType.LAZY)
     private List<Comment> nestedCommentList;
 
 

@@ -69,12 +69,12 @@ public class CommentService {
                 .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         Comment newNestedComment;
-        Optional<Integer> maxCDepth = commentRepository.findWithComment(commentId);
+        Optional<Integer> maxCommentDepth = commentRepository.findWithComment(commentId);
 
-        if(maxCDepth.isEmpty()){
+        if(maxCommentDepth.isEmpty()){
              newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, 1);
         }else{
-            newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, maxCDepth.get() + 1);
+            newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, maxCommentDepth.get() + 1);
         }
 
         commentRepository.save(newNestedComment);
