@@ -58,7 +58,8 @@ public class Comment extends Timestamped {
         this.content = content;
     }
 
-
-
+    public void updateLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
+    }
 
 }
