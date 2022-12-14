@@ -22,7 +22,10 @@ public enum ExceptionMessage {
 
 
     // comment
-    NO_EXIST_COMMENT_EXCEPTION_MSG(400, "해당 댓글이 존재하지 않습니다.");
+    NO_EXIST_COMMENT_EXCEPTION_MSG(400, "해당 댓글이 존재하지 않습니다."),
+
+    // like
+    DUPLICATION_COMMENT_LIKE_EXCEPTION_MSG(400, "이미 좋아요한 댓글 입니다.");
 
 
     private final int status;
