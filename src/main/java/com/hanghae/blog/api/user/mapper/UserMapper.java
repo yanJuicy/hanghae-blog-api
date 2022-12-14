@@ -5,11 +5,14 @@ import com.hanghae.blog.api.user.entity.User;
 import com.hanghae.blog.api.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
+
+    private final PasswordEncoder passwordEncoder;
     //저희는 엔터티 -> dto 변환을 mapper 클래스에서 하기로 했습니다!
     @Value("${admin.token}")
     private String ADMIN_TOKEN;
@@ -24,7 +27,7 @@ public class UserMapper {
         }
         return new User(
                 requestCreateUser.getUsername(),
-                requestCreateUser.getPassword(),
+                passwordEncoder.encode(requestCreateUser.getPassword()),
                 role
         );
     }

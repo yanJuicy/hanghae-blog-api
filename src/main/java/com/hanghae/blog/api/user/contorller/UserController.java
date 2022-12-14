@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import static com.hanghae.blog.api.common.response.ResponseMessage.LOGIN_USER_SUCCESS_MSG;
+import static com.hanghae.blog.api.common.response.ResponseMessage.SIGNUP_USER_SUCCESS_MSG;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -21,11 +24,13 @@ public class UserController {
 
     @PostMapping("/signup")
     public Response signup(@RequestBody @Valid RequestCreateUser requestCreateUser) {
-        return userService.signup(requestCreateUser);
+        userService.signup(requestCreateUser);
+        return new Response(SIGNUP_USER_SUCCESS_MSG);
     }
 
     @PostMapping("/login")
     public Response login(RequestFindUser requestFindUser, HttpServletResponse response) {
-        return userService.login(requestFindUser, response);
+        userService.login(requestFindUser, response);
+        return new Response(LOGIN_USER_SUCCESS_MSG);
     }
 }
