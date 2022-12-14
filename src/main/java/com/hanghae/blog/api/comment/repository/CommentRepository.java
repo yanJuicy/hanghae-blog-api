@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     // cDepth 최대값 가져오는 쿼리
     @Query(value = "select max(commentDepth) from Comment where commentGroup= :commentId")
     Optional<Integer> findWithComment(@Param(value = "commentId") Long commentId);
+    
+    void deleteByCommentGroup(Long commentGroup);
 }
