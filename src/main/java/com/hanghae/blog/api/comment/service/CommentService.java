@@ -60,7 +60,7 @@ public class CommentService {
         Comment commentFind = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
 
-        if(commentFind.getUsername().equals(username)){
+        if(!commentFind.getUsername().equals(username)){
             throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
         }
 
