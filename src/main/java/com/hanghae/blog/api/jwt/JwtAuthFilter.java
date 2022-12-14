@@ -1,6 +1,7 @@
 package com.hanghae.blog.api.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanghae.blog.api.common.exception.ExceptionMessage;
 import com.hanghae.blog.api.common.exception.ExceptionResponse;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,6 +17,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.TOKEN_ERROR_MSG;
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.USER_NOT_FOUND_ERROR_MSG;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,29 +31,37 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = jwtUtil.resolveToken(request);
 
-        if(token != null) {
-            if(!jwtUtil.validateToken(token)){
-                jwtExceptionHandler(response,"Token Error",401);
-                return;
-            }
-            Claims info = jwtUtil.getUserInfoFromToken(token);
-            setAuthentication(info.getSubject());
+        if (token == null) {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request,response);
+
+        if (!jwtUtil.validateToken(token)) {
+            jwtExceptionHandler(response, TOKEN_ERROR_MSG);
+            return;
+        }
+        Claims info = jwtUtil.getUserInfoFromToken(token);
+        setAuthentication(response, info.getSubject());
     }
 
-    public void setAuthentication(String username) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = jwtUtil.createAuthentication(username);
-        context.setAuthentication(authentication);
-
-        SecurityContextHolder.setContext(context);
-    }
-    public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
-        response.setStatus(statusCode);
-        response.setContentType("application/json");
+    public void setAuthentication(HttpServletResponse response, String username) {
         try {
-            String json = new ObjectMapper().writeValueAsString(new ExceptionResponse(msg, statusCode));
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            Authentication authentication = jwtUtil.createAuthentication(username);
+            context.setAuthentication(authentication);
+
+            SecurityContextHolder.setContext(context);
+        } catch (UsernameNotFoundException e) {
+            jwtExceptionHandler(response, USER_NOT_FOUND_ERROR_MSG);
+        }
+
+    }
+
+    public void jwtExceptionHandler(HttpServletResponse response, ExceptionMessage exceptionMessage) {
+        //"application/json"에서
+        //"application/json; charset=utf8" 변경시 한글 에러메세지 가능!
+        response.setContentType("application/json; charset=utf8");
+        try {
+            String json = new ObjectMapper().writeValueAsString(new ExceptionResponse(exceptionMessage));
             response.getWriter().write(json);
         } catch (Exception e) {
             log.error(e.getMessage());

@@ -33,7 +33,8 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 30 * 60 * 1000L;
+    @Value("${token_time}")
+    private String TOKEN_TIME;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Value("${jwt.secret.key}")
@@ -63,7 +64,7 @@ public class JwtUtil {
                 Jwts.builder()
                         .setSubject(username)
                         .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setExpiration(new Date(date.getTime() + Long.parseLong(TOKEN_TIME)))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();
