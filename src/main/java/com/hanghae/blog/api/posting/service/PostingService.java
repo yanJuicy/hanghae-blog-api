@@ -68,9 +68,12 @@ public class PostingService {
         posting.setContents(requestCreatePosting.getContents());
 
         return postingMapper.toResponse(posting);
-
-
-
     }
-
+    @Transactional
+    public String deletePosting(Long postingId){
+        postingRepository.findById(postingId)
+                .orElseThrow(() -> new IllegalArgumentException()); //수정예정
+        postingRepository.deleteById(postingId);
+        return "success";
+    }
 }
