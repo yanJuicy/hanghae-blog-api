@@ -20,22 +20,22 @@ public class CommentMapper {
                 .build();
     }
 
-    public Comment toDepthZeroComment(Long postId, RequestComment requestCreateCommentDto, Long likeCount){
+    public Comment toDepthZeroComment(Long postId, RequestComment requestCreateCommentDto){
         return Comment.builder()
                 .content(requestCreateCommentDto.getContent())
                 .username("test")
                 .postId(postId)
-                .likeCount(likeCount)
+                .likeCount(0L)
                 .commentDepth(0)
                 .build();
     }
 
-    public Comment toNestedComment(Long postId, RequestComment requestComment, Long likeCount, Long commentId, int commentDepth){
+    public Comment toNestedComment(Long postId, RequestComment requestComment, Long commentId, int commentDepth){
         return Comment.builder()
                 .content(requestComment.getContent())
                 .username("test")
                 .postId(postId)
-                .likeCount(likeCount)
+                .likeCount(0L)
                 .commentDepth(commentDepth)
                 .commentGroup(commentId)
                 .build();

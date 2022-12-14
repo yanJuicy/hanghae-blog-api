@@ -26,7 +26,7 @@ public class CommentService {
 
     @Transactional
     public ResponseComment createComment(Long postId, RequestComment requestComment){
-        Comment newComment = commentMapper.toDepthZeroComment(postId, requestComment, 0L);
+        Comment newComment = commentMapper.toDepthZeroComment(postId, requestComment);
 
         postingRepository.findById(postId)
                 .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
@@ -72,9 +72,9 @@ public class CommentService {
         Optional<Integer> maxCommentDepth = commentRepository.findWithComment(commentId);
 
         if(maxCommentDepth.isEmpty()){
-             newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, 1);
+             newNestedComment = commentMapper.toNestedComment(postId, requestComment, commentId, 1);
         }else{
-            newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, maxCommentDepth.get() + 1);
+            newNestedComment = commentMapper.toNestedComment(postId, requestComment, commentId, maxCommentDepth.get() + 1);
         }
 
         commentRepository.save(newNestedComment);
