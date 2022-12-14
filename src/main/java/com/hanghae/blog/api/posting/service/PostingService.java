@@ -60,4 +60,12 @@ public class PostingService {
         return new PageResponse<>(READ_PAGING_POSTING_SUCCESS_MSG, result, fn);
     }
 
+    @Transactional
+    public ResponseCreatePosting findOnePosting(Long id){
+        Posting posting = postingRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+        return new ResponseCreatePosting(posting);
+    }
+
 }
