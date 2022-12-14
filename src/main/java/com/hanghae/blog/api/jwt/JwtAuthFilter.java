@@ -1,5 +1,6 @@
 package com.hanghae.blog.api.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae.blog.api.common.exception.ExceptionResponse;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if(token != null) {
             if(!jwtUtil.validateToken(token)){
-                new ExceptionResponse("토큰이 유효하지 않습니다.",400);
+                jwtExceptionHandler(response,"Token Error",401);
                 return;
             }
             Claims info = jwtUtil.getUserInfoFromToken(token);
@@ -43,5 +44,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.setContext(context);
     }
-
+    public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
+        response.setStatus(statusCode);
+        response.setContentType("application/json");
+        try {
+            String json = new ObjectMapper().writeValueAsString(new ExceptionResponse(msg, statusCode));
+            response.getWriter().write(json);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
 }
