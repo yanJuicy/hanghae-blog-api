@@ -61,11 +61,11 @@ public class PostingService {
     }
 
     @Transactional
-    public ResponseCreatePosting findOnePosting(Long id){
+    public RequestCreatePosting findOnePosting(Long id){
         Posting posting = postingRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
-        return new ResponseCreatePosting(posting);
+        return new RequestCreatePosting(posting);
     }
 
 }
