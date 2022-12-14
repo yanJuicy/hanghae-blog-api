@@ -1,7 +1,6 @@
 package com.hanghae.blog.api.posting.mapper;
 
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
-import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import org.springframework.stereotype.Component;
@@ -9,18 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostingMapper {
 
-    public ResponseCreatePosting toResponse(Posting posting) {
-        ResponseCreatePosting response = ResponseCreatePosting.builder()
-                .id(posting.getId())
-                .title(posting.getTitle())
-                .writer(posting.getWriter())
-                .contents(posting.getContents())
-                .build();
-
-        return response;
-    }
-
-    public ResponsePosting toResponsePosting(Posting posting) {
+    public ResponsePosting toResponse(Posting posting) {
         return ResponsePosting.builder()
                 .id(posting.getId())
                 .title(posting.getTitle())

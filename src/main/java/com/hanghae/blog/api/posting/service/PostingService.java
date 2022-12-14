@@ -2,7 +2,7 @@ package com.hanghae.blog.api.posting.service;
 
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
-import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
+import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
 import com.hanghae.blog.api.posting.repository.PostingRepository;
@@ -26,7 +26,7 @@ public class PostingService {
 
 
     @Transactional
-    public ResponseCreatePosting create(RequestCreatePosting requestDto) {
+    public ResponsePosting create(RequestCreatePosting requestDto) {
 
 		Posting posting = postingMapper.toPosting(requestDto);
 
@@ -36,13 +36,13 @@ public class PostingService {
     }
 
     @Transactional
-    public List<ResponseCreatePosting> findAllPosting(){
+    public List<ResponsePosting> findAllPosting(){
         List<Posting> Posting = postingRepository.findAll();
 
-        List<ResponseCreatePosting> result = new ArrayList<>();
+        List<ResponsePosting> result = new ArrayList<>();
 
         for(Posting p : Posting){
-            result.add(new ResponseCreatePosting(p));
+            result.add(postingMapper.toResponse(p));
         }
         return result;
     }
@@ -53,11 +53,12 @@ public class PostingService {
     }
 
     @Transactional
-    public RequestCreatePosting findOnePosting(Long id){
+    public ResponsePosting findOnePosting(Long id){
         Posting posting = postingRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
-        return new RequestCreatePosting(posting);
+
+        return postingMapper.toResponse(posting);
     }
 
 }

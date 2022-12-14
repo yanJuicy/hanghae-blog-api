@@ -13,11 +13,5 @@ public class RequestCreatePosting {
 	private String writer;
 	private String contents;
 	private String password;
-	
-	public RequestCreatePosting(Posting posting) {
-		this.id=posting.getId();
-		this.title= posting.getTitle();
-		this.writer=posting.getWriter();
-		this.contents= posting.getContents();
-	}
+
 }

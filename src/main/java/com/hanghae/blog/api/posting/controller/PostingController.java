@@ -4,7 +4,6 @@ import com.hanghae.blog.api.common.response.DataResponse;
 import com.hanghae.blog.api.common.response.PageResponse;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
-import com.hanghae.blog.api.posting.dto.ResponseCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
@@ -35,16 +34,16 @@ public class PostingController {
 
     //게시글 등록
     @PostMapping
-    public DataResponse<ResponseCreatePosting> createPosting(@RequestBody RequestCreatePosting requestDto) {
-        ResponseCreatePosting response = postingService.create(requestDto);
+    public DataResponse<ResponsePosting> createPosting(@RequestBody RequestCreatePosting requestDto) {
+        ResponsePosting response = postingService.create(requestDto);
 
         return new DataResponse<>(CREATE_POSTING_SUCCESS_MSG, response);
     }
 
     //전체 게시글 조회
     @GetMapping
-    public DataResponse<List<ResponseCreatePosting>> findAllPosting() {
-        List<ResponseCreatePosting> response = postingService.findAllPosting();
+    public DataResponse<List<ResponsePosting>> findAllPosting() {
+        List<ResponsePosting> response = postingService.findAllPosting();
 
         return new DataResponse<>(READ_POSTING_SUCCESS_MSG, response);
     }
@@ -52,14 +51,16 @@ public class PostingController {
     @GetMapping("/list")
     public PageResponse<ResponsePosting, Posting> findPagePosting(RequestPagePosting requestDto) {
         Page<Posting> pageResult = postingService.findPagePosting(requestDto);
-        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponsePosting(p);
+        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponse(p);
 
         return new PageResponse<>(READ_PAGING_POSTING_SUCCESS_MSG, pageResult, fn);
     }
 
     @GetMapping("/{id}")
-    public RequestCreatePosting findOnePosting(@PathVariable Long id){
-        return postingService.findOnePosting(id);
+    public DataResponse<ResponsePosting> findOnePosting(@PathVariable Long id){
+        ResponsePosting response = postingService.findOnePosting(id);
+
+        return new DataResponse<>(READ_POSTING_SUCCESS_MSG, response);
     }
 
 }
