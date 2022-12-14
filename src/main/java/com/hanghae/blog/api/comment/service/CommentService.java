@@ -50,17 +50,18 @@ public class CommentService {
     }
 
     @Transactional
-    public String deleteComment(Long commentId){
+    public void deleteComment(Long commentId){
 
-        commentRepository.findById(commentId)
+        Comment commentFind = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
 
+        if(commentFind.getCommentGroup() == null) {
+            commentRepository.deleteByCommentGroup(commentId);
+        }
         commentRepository.deleteById(commentId);
-
-        return "success";
     }
     
-
+    // 대댓글 생성
     @Transactional
     public ResponseComment createNestedComment(Long postId, Long commentId, RequestComment requestComment){
 
