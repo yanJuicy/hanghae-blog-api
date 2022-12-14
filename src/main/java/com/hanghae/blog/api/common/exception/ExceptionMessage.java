@@ -17,6 +17,10 @@ public enum ExceptionMessage {
     //jwt
     TOKEN_ERROR_MSG(401,"토큰이 유효하지 않습니다.");
 
+    // comment
+    NO_EXIST_COMMENT_EXCEPTION_MSG(400, "해당 댓글이 존재하지 않습니다.");
+
+
     private final int status;
     private final String msg;
 
