@@ -8,8 +8,13 @@ public enum ResponseMessage {
     // posting
     READ_POSTING_SUCCESS_MSG(200, "포스팅 정보 조회 성공"),
     CREATE_POSTING_SUCCESS_MSG(201, "포스팅 생성 성공 "),
+
+    // comment
     CREATE_COMMENT_SUCCESS_MSG(201, "댓글 생성 성공"),
     UPDATE_COMMENT_SUCCESS_MSG(200, "댓글 수정 성공"),
+    DELETE_COMMENT_SUCCESS_MSG(200, "댓글 삭제 성공"),
+
+    // user
     SIGNUP_USER_SUCCESS_MSG(201, "유저 회원가입 성공 "),
     LOGIN_USER_SUCCESS_MSG(201, "유저 로그인 성공 ");
 
