@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Response login(RequestFindUser requestFindUser, HttpServletResponse response) {
+    public Response login(@RequestBody RequestFindUser requestFindUser, HttpServletResponse response) {
         userService.login(requestFindUser, response);
         return new Response(LOGIN_USER_SUCCESS_MSG);
     }
