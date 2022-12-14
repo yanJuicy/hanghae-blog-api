@@ -15,6 +15,10 @@ public enum ResponseMessage {
     UPDATE_COMMENT_SUCCESS_MSG(200, "댓글 수정 성공"),
     DELETE_COMMENT_SUCCESS_MSG(200, "댓글 삭제 성공"),
 
+    // like
+    CREATE_COMMENT_LIKE_SUCCESS_MSG(201, "댓글 좋아요 성공"),
+    DELETE_COMMENT_LIKE_SUCCESS_MSG(200, "댓글 좋아요 취소 성공"),
+
     // user
     SIGNUP_USER_SUCCESS_MSG(201, "유저 회원가입 성공 "),
     LOGIN_USER_SUCCESS_MSG(201, "유저 로그인 성공 ");
