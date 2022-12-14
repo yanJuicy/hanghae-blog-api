@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +58,14 @@ public class PostingService {
         Posting posting = postingRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
+
+        return postingMapper.toResponse(posting);
+    }
+    @Transactional
+    public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting){
+        Optional<Posting> optional = postingRepository.findById(postingId);
+        Posting posting = optional.orElseThrow();
+        posting.setContents(requestCreatePosting.getContents());
 
         return postingMapper.toResponse(posting);
     }

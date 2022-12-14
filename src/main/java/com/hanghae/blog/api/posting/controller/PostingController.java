@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,6 +62,12 @@ public class PostingController {
         ResponsePosting response = postingService.findOnePosting(id);
 
         return new DataResponse<>(READ_POSTING_SUCCESS_MSG, response);
+    }
+
+    @PutMapping("/{id}")
+    public DataResponse<ResponsePosting> updatePosting(@PathVariable Long id, @RequestBody RequestCreatePosting requestCreatePosting) {
+        ResponsePosting response = postingService.updatePosting(id, requestCreatePosting);
+        return new DataResponse<>(CREATE_POSTING_SUCCESS_MSG, response);
     }
 
 }
