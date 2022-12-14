@@ -8,9 +8,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 
 @Getter
@@ -41,6 +44,15 @@ public class Comment extends Timestamped {
 
     @Column(nullable = false)
     private int cDepth;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Comment comment;
+
+    private Long commentId;
+
+    @OneToMany(mappedBy ="commentId", fetch = FetchType.LAZY)
+    private List<Comment> nestedCommentList;
+
 
     public void updateContent(String content) {
         this.content = content;

@@ -10,7 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_COMMENT_EXCEPTION_MSG;
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
+
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +29,7 @@ public class CommentService {
         Comment newComment = commentMapper.toDepthZeroComment(postId, requestComment, 0L);
 
         postingRepository.findById(postId)
-                .orElseThrow(() -> new NullPointerException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         commentRepository.save(newComment);
 
@@ -55,4 +59,28 @@ public class CommentService {
 
         return "success";
     }
+    
+
+    @Transactional
+    public ResponseComment createNestedComment(Long postId, Long commentId, RequestComment requestComment){
+
+        commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
+        postingRepository.findById(postId)
+                .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
+
+        Comment newNestedComment;
+        Optional<Integer> maxCDepth = commentRepository.findWithComment(commentId);
+
+        if(maxCDepth.isEmpty()){
+             newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, 1);
+        }else{
+            newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, maxCDepth.get() + 1);
+        }
+
+        commentRepository.save(newNestedComment);
+
+        return commentMapper.toResponse(newNestedComment);
+    }
+
+
 }

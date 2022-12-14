@@ -13,9 +13,13 @@ public enum ExceptionMessage {
     DUPLICATE_USER_ERROR_MSG(400,"중복된 사용자가 존재합니다."),
     USER_NOT_FOUND_ERROR_MSG(400,"회원을 찾을 수 없습니다!"),
     PASSWORDS_DO_NOT_MATCH_ERROR_MSG(400,"비밀번호가 일치하지 않습니다!"),
-
+    
     //jwt
-    TOKEN_ERROR_MSG(401,"토큰이 유효하지 않습니다.");
+    TOKEN_ERROR_MSG(401,"토큰이 유효하지 않습니다."),
+
+    // posting
+    NO_EXIST_POSTING_EXCEPTION_MSG(404, "해당 게시글이 존재하지 않습니다."),
+
 
     // comment
     NO_EXIST_COMMENT_EXCEPTION_MSG(400, "해당 댓글이 존재하지 않습니다.");

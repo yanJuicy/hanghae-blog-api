@@ -43,4 +43,10 @@ public class CommentController {
         return new Response(DELETE_COMMENT_SUCCESS_MSG);
     }
 
+    @PostMapping("/{commentId}")
+    public DataResponse<ResponseComment> createNestedComment(@PathVariable Long postId, @PathVariable Long commentId, @RequestBody RequestComment requestComment) {
+        ResponseComment response = commentService.createNestedComment(postId, commentId, requestComment);
+        return new DataResponse<>(CREATE_COMMENT_SUCCESS_MSG, response);
+    }
+
 }

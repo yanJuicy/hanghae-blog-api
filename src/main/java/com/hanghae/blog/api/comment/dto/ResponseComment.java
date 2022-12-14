@@ -14,5 +14,7 @@ public class ResponseComment {
     private String username;
     private LocalDateTime createdAt;
     private Long like;
+    private int cDepth;
+    private Long commentId;
 
 }
