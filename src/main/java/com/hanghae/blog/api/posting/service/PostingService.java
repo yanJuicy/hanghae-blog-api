@@ -68,9 +68,6 @@ public class PostingService {
         posting.setContents(requestCreatePosting.getContents());
 
         return postingMapper.toResponse(posting);
-
-
-
     }
 
 }
