@@ -17,7 +17,8 @@ public enum ResponseMessage {
 
     // user
     SIGNUP_USER_SUCCESS_MSG(201, "유저 회원가입 성공 "),
-    LOGIN_USER_SUCCESS_MSG(201, "유저 로그인 성공 ");
+    LOGIN_USER_SUCCESS_MSG(201, "유저 로그인 성공 "),
+    USER_DELETE_SUCCESS_MSG(201, "회원 탈퇴 성공 ");
 
 
     private final int status;
