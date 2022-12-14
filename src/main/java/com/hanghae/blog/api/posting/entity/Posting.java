@@ -49,5 +49,9 @@ public class Posting extends Timestamped {
 		this.password = password;
 	}
 
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
 
 }
