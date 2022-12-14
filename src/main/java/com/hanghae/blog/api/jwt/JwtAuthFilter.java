@@ -33,14 +33,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (token == null) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         if (!jwtUtil.validateToken(token)) {
             jwtExceptionHandler(response, TOKEN_ERROR_MSG);
-            return;
         }
         Claims info = jwtUtil.getUserInfoFromToken(token);
         setAuthentication(response, info.getSubject());
+        filterChain.doFilter(request, response);
     }
 
     public void setAuthentication(HttpServletResponse response, String username) {
