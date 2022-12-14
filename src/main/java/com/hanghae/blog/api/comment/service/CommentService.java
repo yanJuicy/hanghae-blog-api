@@ -5,7 +5,6 @@ import com.hanghae.blog.api.comment.dto.ResponseComment;
 import com.hanghae.blog.api.comment.entity.Comment;
 import com.hanghae.blog.api.comment.mapper.CommentMapper;
 import com.hanghae.blog.api.comment.repository.CommentRepository;
-import com.hanghae.blog.api.common.response.ResponseMessage;
 import com.hanghae.blog.api.posting.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_COMMENT_EXCEPTION_MSG;
-import static com.hanghae.blog.api.common.response.ResponseMessage.DELETE_COMMENT_SUCCESS_MSG;
 
 @Service
 @RequiredArgsConstructor
@@ -50,15 +48,16 @@ public class CommentService {
     }
 
     @Transactional
-    public ResponseMessage deleteComment(Long commentId){
+    public String deleteComment(Long commentId){
 
         commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
 
         commentRepository.deleteById(commentId);
 
-        return DELETE_COMMENT_SUCCESS_MSG;
+        return "success";
     }
+    
 
     @Transactional
     public ResponseComment createNestedComment(Long postId, Long commentId, RequestComment requestComment){
