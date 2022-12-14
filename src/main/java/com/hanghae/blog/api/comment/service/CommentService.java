@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_COMMENT_EXCEPTION_MSG;
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
 import static com.hanghae.blog.api.common.response.ResponseMessage.DELETE_COMMENT_SUCCESS_MSG;
 
 @Service
@@ -29,7 +30,7 @@ public class CommentService {
         Comment newComment = commentMapper.toDepthZeroComment(postId, requestComment, 0L);
 
         postingRepository.findById(postId)
-                .orElseThrow(() -> new NullPointerException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         commentRepository.save(newComment);
 
@@ -63,9 +64,9 @@ public class CommentService {
     @Transactional
     public ResponseComment createNestedComment(Long postId, Long commentId, RequestComment requestComment){
 
-        commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+        commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
         postingRepository.findById(postId)
-                .orElseThrow(() -> new NullPointerException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         Comment newNestedComment;
         Optional<Integer> maxCDepth = commentRepository.findWithComment(commentId);
