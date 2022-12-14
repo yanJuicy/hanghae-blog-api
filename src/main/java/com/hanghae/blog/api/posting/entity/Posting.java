@@ -1,6 +1,7 @@
 package com.hanghae.blog.api.posting.entity;
 
 import com.hanghae.blog.api.category.entity.Category_Posting_Map;
+import com.hanghae.blog.api.common.entity.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,13 +16,12 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Posting {
+public class Posting extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
