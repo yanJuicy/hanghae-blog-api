@@ -82,5 +82,4 @@ public class PostingService {
         postingRepository.deleteById(postingId);
         return "success";
     }
-
 }

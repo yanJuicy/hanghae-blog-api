@@ -79,4 +79,5 @@ public class PostingController {
         postingService.deletePosting(id);
         return new Response (DELETE_POSTING_SUCCESS_MSG);
     }
+
 }
