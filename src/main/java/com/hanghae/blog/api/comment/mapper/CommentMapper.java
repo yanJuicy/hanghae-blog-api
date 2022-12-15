@@ -48,6 +48,7 @@ public class CommentMapper {
                 .likeCount(0L)
                 .commentDepth(0)
                 .commentGroup(0L)
+                .commentRef(0L)
                 .build();
     }
 
