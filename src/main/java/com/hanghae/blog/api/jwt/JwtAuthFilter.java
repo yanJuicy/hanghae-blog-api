@@ -59,6 +59,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     public void jwtExceptionHandler(HttpServletResponse response, ExceptionMessage exceptionMessage) {
+        response.setStatus(exceptionMessage.getStatus());
         //"application/json"에서
         //"application/json; charset=utf8" 변경시 한글 에러메세지 가능!
         response.setContentType("application/json; charset=utf8");
