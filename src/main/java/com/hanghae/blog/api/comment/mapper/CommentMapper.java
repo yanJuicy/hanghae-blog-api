@@ -19,6 +19,7 @@ public class CommentMapper {
                 .like(comment.getLikeCount())
                 .commentDepth(comment.getCommentDepth())
                 .commentGroup(comment.getCommentGroup())
+                .commentRef(comment.getCommentRef())
                 .build();
     }
 
@@ -29,10 +30,11 @@ public class CommentMapper {
                 .posting(posting)
                 .likeCount(0L)
                 .commentDepth(0)
+                .commentGroup(0L)
                 .build();
     }
 
-    public Comment toNestedComment(User user, Posting posting, RequestComment requestComment, Long commentId, int commentDepth){
+    public Comment toNestedComment(User user, Posting posting, RequestComment requestComment, Long commentId, int commentDepth, Long commentRef){
         return Comment.builder()
                 .content(requestComment.getContent())
                 .user(user)
@@ -40,6 +42,7 @@ public class CommentMapper {
                 .likeCount(0L)
                 .commentDepth(commentDepth)
                 .commentGroup(commentId)
+                .commentRef(commentRef)
                 .build();
     }
 

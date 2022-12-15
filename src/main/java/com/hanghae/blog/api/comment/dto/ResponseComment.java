@@ -16,5 +16,6 @@ public class ResponseComment {
     private Long like;
     private int commentDepth;
     private Long commentGroup;
+    private Long commentRef;
 
 }

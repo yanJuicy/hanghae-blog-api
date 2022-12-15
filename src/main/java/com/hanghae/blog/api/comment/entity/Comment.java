@@ -33,9 +33,6 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(nullable = false, name = "username")
-//    private String username; // user로 변경 될 곳
-//    @Column(nullable = false, name = "username")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
@@ -52,6 +49,10 @@ public class Comment extends Timestamped {
     private int commentDepth;
 
     private Long commentGroup;
+//    @ManyToOne()
+//    private Comment commentGroup;
+
+    private Long commentRef;
 
     @OneToMany(mappedBy ="commentGroup", fetch = FetchType.LAZY)
     private List<Comment> nestedCommentList = new ArrayList<>();
