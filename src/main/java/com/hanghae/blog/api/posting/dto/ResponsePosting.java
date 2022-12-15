@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -15,5 +16,6 @@ public class ResponsePosting {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
+    private List<String> categories;
 
 }

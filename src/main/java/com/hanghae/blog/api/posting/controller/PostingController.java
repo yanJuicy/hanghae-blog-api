@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -59,7 +60,8 @@ public class PostingController {
     @GetMapping("/list")
     public PageResponse<ResponsePosting, Posting> findPagePosting(RequestPagePosting requestDto) {
         Page<Posting> pageResult = postingService.findPagePosting(requestDto);
-        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponse(p);
+        List<String> categoryList = new ArrayList<>();
+        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponse(p, categoryList);
 
         return new PageResponse<>(READ_PAGING_POSTING_SUCCESS_MSG, pageResult, fn);
     }

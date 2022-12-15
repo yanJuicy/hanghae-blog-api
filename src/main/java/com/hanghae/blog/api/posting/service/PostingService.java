@@ -1,5 +1,8 @@
 package com.hanghae.blog.api.posting.service;
 
+import com.hanghae.blog.api.category.entity.Category;
+import com.hanghae.blog.api.category.service.CategoryService;
+import com.hanghae.blog.api.category_posting_map.service.CategoryPostingMapService;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
@@ -28,27 +32,37 @@ public class PostingService {
     private static final String SORT_BY = "createdAt";
 
     private final PostingRepository postingRepository;
-	private final PostingMapper postingMapper;
+	  private final PostingMapper postingMapper;
     private final UserRepository userRepository;
-
+    private final CategoryService categoryService;
+    private final CategoryPostingMapService categoryPostingMapService;
+    
     @Transactional
     public ResponsePosting create(String username, RequestCreatePosting requestDto) {
         Optional<User> user = userRepository.findByUsername(username);
 		Posting posting = postingMapper.toPosting(user.get(), requestDto);
 
+
         Posting savedPosting = postingRepository.save(posting);
 
-        return postingMapper.toResponse(savedPosting);
+        // 카테고리 저장
+        List<Category> categoryList = categoryService.saveCategories(requestDto.getCategories());
+
+        // 카테고리_포스팅 매핑 테이블 저장
+        categoryPostingMapService.saveCategoryPostingMap(categoryList, savedPosting);
+
+        return postingMapper.toResponse(savedPosting, requestDto.getCategories());
     }
 
     @Transactional
-    public List<ResponsePosting> findAllPosting(){
-        List<Posting> Posting = postingRepository.findAll();
+    public List<ResponsePosting> findAllPosting() {
+        List<Posting> postingList = postingRepository.findAll();
 
         List<ResponsePosting> result = new ArrayList<>();
 
-        for(Posting p : Posting){
-            result.add(postingMapper.toResponse(p));
+        for (Posting p : postingList) {
+            List<String> categories = findCategories(p);
+            result.add(postingMapper.toResponse(p, categories));
         }
         return result;
     }
@@ -59,7 +73,7 @@ public class PostingService {
     }
 
     @Transactional
-    public ResponsePosting findOnePosting(Long id){
+    public ResponsePosting findOnePosting(Long id) {
         Posting posting = postingRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
@@ -73,7 +87,16 @@ public class PostingService {
         );
         posting.setContents(requestCreatePosting.getContents());
 
-        return postingMapper.toResponse(posting);
+        List<String> categories = findCategories(posting);
+        return postingMapper.toResponse(posting, categories);
+    }
+
+    public List<String> findCategories(Posting posting) {
+        List<Category> categories = categoryPostingMapService.findCategories(posting);
+        List<String> categoryNames = categories.stream()
+                .map(c -> c.getName())
+                .collect(Collectors.toList());
+        return categoryNames;
     }
 
     @Transactional

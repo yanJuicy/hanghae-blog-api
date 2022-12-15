@@ -6,10 +6,12 @@ import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.user.entity.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class PostingMapper {
 
-    public ResponsePosting toResponse(Posting posting) {
+    public ResponsePosting toResponse(Posting posting, List<String> categoryList) {
         return ResponsePosting.builder()
                 .id(posting.getId())
                 .title(posting.getTitle())
@@ -17,6 +19,7 @@ public class PostingMapper {
                 .contents(posting.getContents())
                 .createdAt(posting.getCreatedAt())
                 .lastModifiedAt(posting.getLastModifiedAt())
+                .categories(categoryList)
                 .build();
     }
 

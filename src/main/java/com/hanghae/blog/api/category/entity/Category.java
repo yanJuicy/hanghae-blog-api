@@ -1,5 +1,8 @@
 package com.hanghae.blog.api.category.entity;
 
+import com.hanghae.blog.api.category_posting_map.entity.CategoryPostingMap;
+import lombok.Getter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 public class Category {
 
@@ -17,11 +21,15 @@ public class Category {
     private Long id;
 
     @Column(nullable = false)
-    private String categoryName;
+    private String name;
 
     @OneToMany(mappedBy = "category")
-    private List<Category_Posting_Map> categoryPostingMapList = new ArrayList<>();
+    private List<CategoryPostingMap> categoryPostingMapList = new ArrayList<>();
 
     protected Category() {}
+
+    public Category(String name) {
+        this.name = name;
+    }
 
 }
