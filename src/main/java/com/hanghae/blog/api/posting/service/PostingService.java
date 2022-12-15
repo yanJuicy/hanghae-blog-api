@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.POSTING_TOKEN_ERROR_MSG;
+
 @Service
 @RequiredArgsConstructor
 public class PostingService {
@@ -56,18 +59,28 @@ public class PostingService {
     @Transactional
     public ResponsePosting findOnePosting(Long id){
         Posting posting = postingRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
-        );
+                () -> new IllegalArgumentException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         return postingMapper.toResponse(posting);
     }
     @Transactional
     public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting){
         Optional<Posting> optional = postingRepository.findById(postingId);
-        Posting posting = optional.orElseThrow();
+        Posting posting = optional.orElseThrow(
+                () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg())
+        );
         posting.setContents(requestCreatePosting.getContents());
 
         return postingMapper.toResponse(posting);
+    }
+
+    @Transactional
+    public String deletePosting(Long postingId){
+        postingRepository.findById(postingId)
+                .orElseThrow(
+                        () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
+        postingRepository.deleteById(postingId);
+        return "success";
     }
 
 }

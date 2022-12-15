@@ -19,6 +19,7 @@ public enum ExceptionMessage {
 
     // posting
     NO_EXIST_POSTING_EXCEPTION_MSG(404, "해당 게시글이 존재하지 않습니다."),
+    POSTING_TOKEN_ERROR_MSG(401,"권한이 없습니다."),
 
 
     // comment
