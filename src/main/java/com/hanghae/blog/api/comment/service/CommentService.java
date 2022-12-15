@@ -5,7 +5,10 @@ import com.hanghae.blog.api.comment.dto.ResponseComment;
 import com.hanghae.blog.api.comment.entity.Comment;
 import com.hanghae.blog.api.comment.mapper.CommentMapper;
 import com.hanghae.blog.api.comment.repository.CommentRepository;
+import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.repository.PostingRepository;
+import com.hanghae.blog.api.user.entity.User;
+import com.hanghae.blog.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +27,16 @@ public class CommentService {
     private  final CommentMapper commentMapper;
     private final PostingRepository postingRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ResponseComment createComment(String username, Long postId, RequestComment requestComment){
-        Comment newComment = commentMapper.toDepthZeroComment(username, postId, requestComment);
+        Optional<User> user = userRepository.findByUsername(username);
 
-        postingRepository.findById(postId)
+        Posting posting = postingRepository.findById(postId)
                 .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
+        Comment newComment = commentMapper.toDepthZeroComment(user.get(), posting, requestComment);
         commentRepository.save(newComment);
 
         return commentMapper.toResponse(newComment);
@@ -41,10 +46,10 @@ public class CommentService {
    @Transactional
     public ResponseComment updateComment(String username, Long commentId, RequestComment requestComment){
 
-        Comment commentFind = commentRepository.findById(commentId)
+       Comment commentFind = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
 
-        if(!commentFind.getUsername().equals(username)){
+        if(!commentFind.getUser().getUsername().equals(username)){
             throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
         }
 
@@ -60,7 +65,7 @@ public class CommentService {
         Comment commentFind = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
 
-        if(!commentFind.getUsername().equals(username)){
+        if(!commentFind.getUser().getUsername().equals(username)){
             throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
         }
 
@@ -73,18 +78,19 @@ public class CommentService {
     // 대댓글 생성
     @Transactional
     public ResponseComment createNestedComment(String username, Long postId, Long commentId, RequestComment requestComment){
+        Optional<User> user = userRepository.findByUsername(username);
 
         commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
-        postingRepository.findById(postId)
+        Posting posting = postingRepository.findById(postId)
                 .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         Comment newNestedComment;
         Optional<Integer> maxCommentDepth = commentRepository.findWithComment(commentId);
 
         if(maxCommentDepth.isEmpty()){
-             newNestedComment = commentMapper.toNestedComment(username, postId, requestComment, commentId, 1);
+             newNestedComment = commentMapper.toNestedComment(user.get(), posting, requestComment, commentId, 1);
         }else{
-            newNestedComment = commentMapper.toNestedComment(username, postId, requestComment, commentId, maxCommentDepth.get() + 1);
+            newNestedComment = commentMapper.toNestedComment(user.get(), posting, requestComment, commentId, maxCommentDepth.get() + 1);
         }
 
         commentRepository.save(newNestedComment);

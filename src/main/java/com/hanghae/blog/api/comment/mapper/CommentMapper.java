@@ -3,6 +3,8 @@ package com.hanghae.blog.api.comment.mapper;
 import com.hanghae.blog.api.comment.dto.RequestComment;
 import com.hanghae.blog.api.comment.dto.ResponseComment;
 import com.hanghae.blog.api.comment.entity.Comment;
+import com.hanghae.blog.api.posting.entity.Posting;
+import com.hanghae.blog.api.user.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +14,7 @@ public class CommentMapper {
         return ResponseComment.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .username(comment.getUsername())
+                .username(comment.getUser().getUsername())
                 .createdAt(comment.getCreatedAt())
                 .like(comment.getLikeCount())
                 .commentDepth(comment.getCommentDepth())
@@ -20,21 +22,21 @@ public class CommentMapper {
                 .build();
     }
 
-    public Comment toDepthZeroComment(String username, Long postId, RequestComment requestCreateCommentDto){
+    public Comment toDepthZeroComment(User user, Posting posting, RequestComment requestCreateCommentDto){
         return Comment.builder()
                 .content(requestCreateCommentDto.getContent())
-                .username(username)
-                .postId(postId)
+                .user(user)
+                .posting(posting)
                 .likeCount(0L)
                 .commentDepth(0)
                 .build();
     }
 
-    public Comment toNestedComment(String username, Long postId, RequestComment requestComment, Long commentId, int commentDepth){
+    public Comment toNestedComment(User user, Posting posting, RequestComment requestComment, Long commentId, int commentDepth){
         return Comment.builder()
                 .content(requestComment.getContent())
-                .username(username)
-                .postId(postId)
+                .user(user)
+                .posting(posting)
                 .likeCount(0L)
                 .commentDepth(commentDepth)
                 .commentGroup(commentId)

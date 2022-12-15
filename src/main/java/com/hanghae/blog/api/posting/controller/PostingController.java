@@ -9,8 +9,10 @@ import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
 import com.hanghae.blog.api.posting.service.PostingService;
+import com.hanghae.blog.api.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +41,9 @@ public class PostingController {
 
     //게시글 등록
     @PostMapping
-    public DataResponse<ResponsePosting> createPosting(@RequestBody RequestCreatePosting requestDto) {
-        ResponsePosting response = postingService.create(requestDto);
+    public DataResponse<ResponsePosting> createPosting(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody RequestCreatePosting requestDto) {
+        String username = userDetails.getUsername();
+        ResponsePosting response = postingService.create(username, requestDto);
 
         return new DataResponse<>(CREATE_POSTING_SUCCESS_MSG, response);
     }
@@ -69,13 +72,16 @@ public class PostingController {
     }
     //게시글 수정
     @PutMapping("/{id}")
-    public DataResponse<ResponsePosting> updatePosting(@PathVariable Long id, @RequestBody RequestCreatePosting requestCreatePosting) {
+    public DataResponse<ResponsePosting> updatePosting(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody RequestCreatePosting requestCreatePosting) {
+        String username = userDetails.getUsername();
+
         ResponsePosting response = postingService.updatePosting(id, requestCreatePosting);
         return new DataResponse<>(UPDATE_POSTING_SUCCESS_MSG, response);
     }
     //게시글 삭제
     @DeleteMapping("/{id}")
-    public Response deletePosting(@PathVariable Long id) {
+    public Response deletePosting(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        String username = userDetails.getUsername();
         postingService.deletePosting(id);
         return new Response (DELETE_POSTING_SUCCESS_MSG);
     }
