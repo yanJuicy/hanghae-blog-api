@@ -3,6 +3,10 @@ package com.hanghae.blog.api.posting.service;
 import com.hanghae.blog.api.category.entity.Category;
 import com.hanghae.blog.api.category.service.CategoryService;
 import com.hanghae.blog.api.category_posting_map.service.CategoryPostingMapService;
+import com.hanghae.blog.api.comment.dto.ResponseComment;
+import com.hanghae.blog.api.comment.entity.Comment;
+import com.hanghae.blog.api.comment.mapper.CommentMapper;
+import com.hanghae.blog.api.comment.repository.CommentRepository;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
@@ -20,8 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.POSTING_TOKEN_ERROR_MSG;
@@ -30,17 +34,18 @@ import static com.hanghae.blog.api.common.exception.ExceptionMessage.POSTING_TOK
 @RequiredArgsConstructor
 public class PostingService {
     private static final String SORT_BY = "createdAt";
-
+    private final CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
     private final PostingRepository postingRepository;
-	  private final PostingMapper postingMapper;
+    private final PostingMapper postingMapper;
     private final UserRepository userRepository;
     private final CategoryService categoryService;
     private final CategoryPostingMapService categoryPostingMapService;
-    
+
     @Transactional
     public ResponsePosting create(String username, RequestCreatePosting requestDto) {
         Optional<User> user = userRepository.findByUsername(username);
-		Posting posting = postingMapper.toPosting(user.get(), requestDto);
+        Posting posting = postingMapper.toPosting(user.get(), requestDto);
 
 
         Posting savedPosting = postingRepository.save(posting);
@@ -51,18 +56,23 @@ public class PostingService {
         // 카테고리_포스팅 매핑 테이블 저장
         categoryPostingMapService.saveCategoryPostingMap(categoryList, savedPosting);
 
-        return postingMapper.toResponse(savedPosting, requestDto.getCategories());
+        return postingMapper.toResponse(savedPosting, requestDto.getCategories(), null);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ResponsePosting> findAllPosting() {
         List<Posting> postingList = postingRepository.findAll();
 
         List<ResponsePosting> result = new ArrayList<>();
 
         for (Posting p : postingList) {
+            List<Comment> comments = commentRepository.findAllByPostingOrderByCreatedAtDesc(p);
+            List<ResponseComment> commentList = new ArrayList<>();
+            for (Comment c : comments) {
+                commentList.add(commentMapper.toResponse(c));
+            }
             List<String> categories = findCategories(p);
-            result.add(postingMapper.toResponse(p, categories));
+            result.add(postingMapper.toResponse(p, categories, commentList));
         }
         return result;
     }
@@ -72,16 +82,23 @@ public class PostingService {
         return postingRepository.findAll(pageable);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ResponsePosting findOnePosting(Long id) {
         Posting posting = postingRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
         List<String> categories = findCategories(posting);
 
-        return postingMapper.toResponse(posting, categories);
+        List<Comment> comments = commentRepository.findAllByPostingOrderByCreatedAtDesc(posting);
+        List<ResponseComment> commentList = new ArrayList<>();
+        for (Comment c : comments) {
+            commentList.add(commentMapper.toResponse(c));
+        }
+
+        return postingMapper.toResponse(posting, categories, commentList);
     }
+
     @Transactional
-    public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting){
+    public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting) {
         Optional<Posting> optional = postingRepository.findById(postingId);
         Posting posting = optional.orElseThrow(
                 () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg())
@@ -89,7 +106,7 @@ public class PostingService {
         posting.setContents(requestCreatePosting.getContents());
 
         List<String> categories = findCategories(posting);
-        return postingMapper.toResponse(posting, categories);
+        return postingMapper.toResponse(posting, categories, null);
     }
 
     public List<String> findCategories(Posting posting) {
@@ -101,7 +118,7 @@ public class PostingService {
     }
 
     @Transactional
-    public String deletePosting(Long postingId){
+    public String deletePosting(Long postingId) {
         postingRepository.findById(postingId)
                 .orElseThrow(
                         () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));

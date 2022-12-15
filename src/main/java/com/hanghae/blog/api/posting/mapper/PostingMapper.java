@@ -1,5 +1,6 @@
 package com.hanghae.blog.api.posting.mapper;
 
+import com.hanghae.blog.api.comment.dto.ResponseComment;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
@@ -11,7 +12,7 @@ import java.util.List;
 @Component
 public class PostingMapper {
 
-    public ResponsePosting toResponse(Posting posting, List<String> categoryList) {
+    public ResponsePosting toResponse(Posting posting, List<String> categoryList, List<ResponseComment> commentList) {
         return ResponsePosting.builder()
                 .id(posting.getId())
                 .title(posting.getTitle())
@@ -20,6 +21,7 @@ public class PostingMapper {
                 .createdAt(posting.getCreatedAt())
                 .lastModifiedAt(posting.getLastModifiedAt())
                 .categories(categoryList)
+                .commentList(commentList)
                 .build();
     }
 
