@@ -1,6 +1,7 @@
 package com.hanghae.blog.api.comment.entity;
 
 import com.hanghae.blog.api.common.entity.Timestamped;
+import com.hanghae.blog.api.like.entity.CommentLike;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,22 +45,22 @@ public class Comment extends Timestamped {
     private Long postId;
 
     @Column(nullable = false)
-    private int cDepth;
+    private int commentDepth;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Comment comment;
+    private Long commentGroup;
 
-    private Long commentId;
+    @OneToMany(mappedBy ="commentGroup", fetch = FetchType.LAZY)
+    private List<Comment> nestedCommentList = new ArrayList<>();
 
-    @OneToMany(mappedBy ="commentId", fetch = FetchType.LAZY)
-    private List<Comment> nestedCommentList;
-
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
+    private List<CommentLike> commentLikeList = new ArrayList<>();
 
     public void updateContent(String content) {
         this.content = content;
     }
 
-
-
+    public void updateLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
+    }
 
 }

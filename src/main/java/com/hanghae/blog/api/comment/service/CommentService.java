@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_COMMENT_EXCEPTION_MSG;
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.USER_NOT_MATCH_ERROR_MSG;
 
 
 @Service
@@ -25,8 +26,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public ResponseComment createComment(Long postId, RequestComment requestComment){
-        Comment newComment = commentMapper.toDepthZeroComment(postId, requestComment, 0L);
+    public ResponseComment createComment(String username, Long postId, RequestComment requestComment){
+        Comment newComment = commentMapper.toDepthZeroComment(username, postId, requestComment);
 
         postingRepository.findById(postId)
                 .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
@@ -38,10 +39,14 @@ public class CommentService {
     }
 
    @Transactional
-    public ResponseComment updateComment(Long commentId, RequestComment requestComment){
+    public ResponseComment updateComment(String username, Long commentId, RequestComment requestComment){
 
         Comment commentFind = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
+
+        if(!commentFind.getUsername().equals(username)){
+            throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
+        }
 
         String updateComment = requestComment.getContent();
         commentFind.updateContent(updateComment);
@@ -50,31 +55,36 @@ public class CommentService {
     }
 
     @Transactional
-    public String deleteComment(Long commentId){
+    public void deleteComment(String username, Long commentId){
 
-        commentRepository.findById(commentId)
+        Comment commentFind = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
 
-        commentRepository.deleteById(commentId);
+        if(!commentFind.getUsername().equals(username)){
+            throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
+        }
 
-        return "success";
+        if(commentFind.getCommentGroup() == null) {
+            commentRepository.deleteByCommentGroup(commentId);
+        }
+        commentRepository.deleteById(commentId);
     }
     
-
+    // 대댓글 생성
     @Transactional
-    public ResponseComment createNestedComment(Long postId, Long commentId, RequestComment requestComment){
+    public ResponseComment createNestedComment(String username, Long postId, Long commentId, RequestComment requestComment){
 
         commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
         postingRepository.findById(postId)
                 .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         Comment newNestedComment;
-        Optional<Integer> maxCDepth = commentRepository.findWithComment(commentId);
+        Optional<Integer> maxCommentDepth = commentRepository.findWithComment(commentId);
 
-        if(maxCDepth.isEmpty()){
-             newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, 1);
+        if(maxCommentDepth.isEmpty()){
+             newNestedComment = commentMapper.toNestedComment(username, postId, requestComment, commentId, 1);
         }else{
-            newNestedComment = commentMapper.toNestedComment(postId, requestComment, 0L, commentId, maxCDepth.get() + 1);
+            newNestedComment = commentMapper.toNestedComment(username, postId, requestComment, commentId, maxCommentDepth.get() + 1);
         }
 
         commentRepository.save(newNestedComment);
