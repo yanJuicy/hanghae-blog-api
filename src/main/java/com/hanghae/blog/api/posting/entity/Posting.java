@@ -1,6 +1,6 @@
 package com.hanghae.blog.api.posting.entity;
 
-import com.hanghae.blog.api.category.entity.Category_Posting_Map;
+import com.hanghae.blog.api.category_posting_map.entity.CategoryPostingMap;
 import com.hanghae.blog.api.common.entity.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +40,7 @@ public class Posting extends Timestamped {
     private String password;
 
     @OneToMany(mappedBy = "posting")
-    private List<Category_Posting_Map> categoryPostingMapList = new ArrayList<>();
+    private List<CategoryPostingMap> categoryPostingMapList = new ArrayList<>();
 
 	public Posting(String title, String writer, String contents, String password) {
 		this.title = title;

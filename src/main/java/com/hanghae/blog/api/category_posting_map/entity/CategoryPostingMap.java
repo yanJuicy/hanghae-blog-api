@@ -1,6 +1,8 @@
-package com.hanghae.blog.api.category.entity;
+package com.hanghae.blog.api.category_posting_map.entity;
 
+import com.hanghae.blog.api.category.entity.Category;
 import com.hanghae.blog.api.posting.entity.Posting;
+import lombok.Getter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+@Getter
 @Entity
-public class Category_Posting_Map {
+public class CategoryPostingMap {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -21,6 +24,11 @@ public class Category_Posting_Map {
     @ManyToOne
     private Posting posting;
 
-    protected Category_Posting_Map() {}
+    protected CategoryPostingMap() {}
+
+    public CategoryPostingMap(Category category, Posting posting) {
+        this.category = category;
+        this.posting = posting;
+    }
 
 }
