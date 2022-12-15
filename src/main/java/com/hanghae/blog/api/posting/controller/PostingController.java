@@ -69,7 +69,7 @@ public class PostingController {
     public PageResponse<ResponsePosting, Posting> findPagePosting(RequestPagePosting requestDto) {
         Page<Posting> pageResult = postingService.findPagePosting(requestDto);
         List<String> categoryList = new ArrayList<>();
-        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponse(p, categoryList);
+        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponse(p, categoryList,null);
 
         return new PageResponse<>(READ_PAGING_POSTING_SUCCESS_MSG, pageResult, fn);
     }

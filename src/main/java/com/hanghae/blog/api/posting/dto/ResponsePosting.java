@@ -1,5 +1,6 @@
 package com.hanghae.blog.api.posting.dto;
 
+import com.hanghae.blog.api.comment.dto.ResponseComment;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,5 +18,6 @@ public class ResponsePosting {
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private List<String> categories;
+    private List<ResponseComment> commentList;
 
 }
