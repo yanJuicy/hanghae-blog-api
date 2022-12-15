@@ -76,8 +76,9 @@ public class PostingService {
     public ResponsePosting findOnePosting(Long id) {
         Posting posting = postingRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
+        List<String> categories = findCategories(posting);
 
-        return postingMapper.toResponse(posting);
+        return postingMapper.toResponse(posting, categories);
     }
     @Transactional
     public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting){

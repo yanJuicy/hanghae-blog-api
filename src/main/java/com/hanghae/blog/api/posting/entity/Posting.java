@@ -1,7 +1,6 @@
 package com.hanghae.blog.api.posting.entity;
 
 import com.hanghae.blog.api.category_posting_map.entity.CategoryPostingMap;
-import com.hanghae.blog.api.category.entity.Category_Posting_Map;
 import com.hanghae.blog.api.comment.entity.Comment;
 import com.hanghae.blog.api.common.entity.Timestamped;
 import com.hanghae.blog.api.user.entity.User;
@@ -47,9 +46,6 @@ public class Posting extends Timestamped {
 
     @OneToMany(mappedBy = "posting")
     private List<CategoryPostingMap> categoryPostingMapList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "posting", fetch = FetchType.LAZY)
-    private List<Category_Posting_Map> categoryPostingMapList = new ArrayList<>();
 
     @OneToMany(mappedBy = "posting", fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
