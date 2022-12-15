@@ -31,12 +31,14 @@ public class CommentController {
 
     }
 
+    // 댓글 및 대댓글 수정
     @PutMapping("/{commentId}")
     public DataResponse<ResponseComment> updateComment(@PathVariable Long commentId, @RequestBody RequestComment requestComment) {
         ResponseComment response = commentService.updateComment(commentId, requestComment);
         return new DataResponse<>(UPDATE_COMMENT_SUCCESS_MSG, response);
     }
 
+    // 댓글 및 대댓글 삭제
     @DeleteMapping("/{commentId}")
     public Response deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
