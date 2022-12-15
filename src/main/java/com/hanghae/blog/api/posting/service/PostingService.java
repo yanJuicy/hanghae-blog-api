@@ -2,11 +2,13 @@ package com.hanghae.blog.api.posting.service;
 
 import com.hanghae.blog.api.category.entity.Category;
 import com.hanghae.blog.api.category.service.CategoryService;
+import com.hanghae.blog.api.category_posting_map.repository.CategoryPostingMapRepository;
 import com.hanghae.blog.api.category_posting_map.service.CategoryPostingMapService;
 import com.hanghae.blog.api.comment.dto.ResponseComment;
 import com.hanghae.blog.api.comment.entity.Comment;
 import com.hanghae.blog.api.comment.mapper.CommentMapper;
 import com.hanghae.blog.api.comment.repository.CommentRepository;
+import com.hanghae.blog.api.like.repository.CommentLikeRepository;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.POSTING_TOKEN_ERROR_MSG;
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.USER_NOT_MATCH_ERROR_MSG;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +44,8 @@ public class PostingService {
     private final UserRepository userRepository;
     private final CategoryService categoryService;
     private final CategoryPostingMapService categoryPostingMapService;
+    private final CommentLikeRepository commentLikeRepository;
+    private final CategoryPostingMapRepository categoryPostingMapRepository;
 
     @Transactional
     public ResponsePosting create(String username, RequestCreatePosting requestDto) {
@@ -98,15 +103,23 @@ public class PostingService {
     }
 
     @Transactional
-    public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting) {
+    public ResponsePosting updatePosting(String username, Long postingId, RequestCreatePosting requestCreatePosting){
         Optional<Posting> optional = postingRepository.findById(postingId);
         Posting posting = optional.orElseThrow(
-                () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg())
-        );
+                () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
+        if(!posting.getUser().getUsername().equals(username)){
+            throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
+        }
         posting.setContents(requestCreatePosting.getContents());
-
         List<String> categories = findCategories(posting);
-        return postingMapper.toResponse(posting, categories, null);
+
+        List<Comment> comments = commentRepository.findAllByPostingOrderByCreatedAtDesc(posting);
+        List<ResponseComment> commentList = new ArrayList<>();
+        for (Comment c : comments) {
+            commentList.add(commentMapper.toResponse(c));
+        }
+
+        return postingMapper.toResponse(posting, categories, commentList);
     }
 
     public List<String> findCategories(Posting posting) {
@@ -118,11 +131,28 @@ public class PostingService {
     }
 
     @Transactional
-    public String deletePosting(Long postingId) {
-        postingRepository.findById(postingId)
-                .orElseThrow(
-                        () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
+    public void deletePosting(Long postingId, String username){
+        Optional<Posting> optional = postingRepository.findById(postingId);
+        Posting posting = optional.orElseThrow(
+                () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
+
+        if(!posting.getUser().getUsername().equals(username)){
+            throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
+        }
+        List<String> categories = findCategories(posting);
+
+        List<Comment> comments = commentRepository.findAllByPostingOrderByCreatedAtDesc(posting);
+        for (Comment c : comments) {
+            commentLikeRepository.deleteCommentLikeByComment(c);
+        }
+        //댓글 좋아요 먼저 삭제 -
+        commentRepository.deleteAllByPosting(posting);
+//        //포스트좋아요
+//        for (Posting p : posting){
+//            postingL
+//        }
+        //카테고리
+        categoryPostingMapRepository.deleteAllByPosting(posting);
         postingRepository.deleteById(postingId);
-        return "success";
     }
 }
