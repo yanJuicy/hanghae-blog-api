@@ -13,6 +13,7 @@ import com.hanghae.blog.api.comment.repository.CommentRepository;
 import com.hanghae.blog.api.like.repository.CommentLikeRepository;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
+import com.hanghae.blog.api.posting.dto.ResponsePagePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
@@ -65,7 +66,7 @@ public class PostingService {
         // 카테고리_포스팅 매핑 테이블 저장
         categoryPostingMapService.saveCategoryPostingMap(categoryList, savedPosting);
 
-        return postingMapper.toResponse(savedPosting, requestDto.getCategories(), null);
+        return postingMapper.toResponse(savedPosting);
     }
 
     @Transactional(readOnly = true)
@@ -86,9 +87,17 @@ public class PostingService {
         return result;
     }
 
-    public Page<Posting> findPagePosting(RequestPagePosting requestDto) {
+    @Transactional(readOnly = true)
+    public ResponsePagePosting findPagePosting(RequestPagePosting requestDto) {
         Pageable pageable = requestDto.getPageable(Sort.by(SORT_BY));
-        return postingRepository.findAll(pageable);
+        Page<Posting> pageResult = postingRepository.findAll(pageable);
+
+        List<Posting> postingList = pageResult.getContent();
+        List<ResponsePosting> response = postingList.stream()
+                .map(posting -> postingMapper.toResponse(posting))
+                .collect(Collectors.toList());
+
+        return new ResponsePagePosting(pageResult, response);
     }
 
     @Transactional(readOnly = true)
