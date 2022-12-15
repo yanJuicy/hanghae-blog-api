@@ -1,6 +1,8 @@
 package com.hanghae.blog.api.user.service;
 
+import com.hanghae.blog.api.comment.repository.CommentRepository;
 import com.hanghae.blog.api.jwt.JwtUtil;
+import com.hanghae.blog.api.posting.repository.PostingRepository;
 import com.hanghae.blog.api.user.dto.RequestCreateUser;
 import com.hanghae.blog.api.user.dto.RequestFindUser;
 import com.hanghae.blog.api.user.entity.User;
@@ -23,6 +25,9 @@ import static com.hanghae.blog.api.common.exception.ExceptionMessage.USER_NOT_FO
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+
+    private final PostingRepository postingRepository;
+    private final CommentRepository commentRepository;
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
 
@@ -53,13 +58,15 @@ public class UserService {
 
     @Transactional
     public void userDelete(String password, User user) {
-        userRepository.findByUsername(user.getUsername()).orElseThrow(
-                ()->new IllegalArgumentException(USER_NOT_FOUND_ERROR_MSG.getMsg())
-        );
-        System.out.println(user.getUsername());
         if (!passwordEncoder.matches(password, user.getPassword())){
             throw new IllegalArgumentException(PASSWORDS_DO_NOT_MATCH_ERROR_MSG.getMsg());
         }
+
+
+        //관련 API 완성시 연관관계 제일 마지막꺼부터 순차적으로 하나씩 다 삭제되게 하기
+        //케스케이드 안쓰고 구현하기
+//        commentRepository.delete();
+//        postingRepository.delete();
         userRepository.delete(user);
     }
 }
