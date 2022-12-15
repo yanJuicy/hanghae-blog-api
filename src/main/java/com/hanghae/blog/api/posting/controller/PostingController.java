@@ -85,7 +85,7 @@ public class PostingController {
     public DataResponse<ResponsePosting> updatePosting(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody RequestCreatePosting requestCreatePosting) {
         String username = userDetails.getUsername();
 
-        ResponsePosting response = postingService.updatePosting(id, requestCreatePosting);
+        ResponsePosting response = postingService.updatePosting(username,id, requestCreatePosting);
         return new DataResponse<>(UPDATE_POSTING_SUCCESS_MSG, response);
     }
     //게시글 삭제
