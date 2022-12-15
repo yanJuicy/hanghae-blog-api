@@ -21,7 +21,7 @@ import static com.hanghae.blog.api.common.response.ResponseMessage.DELETE_COMMEN
 import static com.hanghae.blog.api.common.response.ResponseMessage.UPDATE_COMMENT_SUCCESS_MSG;
 
 @RestController
-@RequestMapping("/api/posts/{postId}/comments")
+@RequestMapping("/api/postings/{postId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;

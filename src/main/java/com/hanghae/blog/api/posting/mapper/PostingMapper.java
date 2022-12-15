@@ -27,9 +27,9 @@ public class PostingMapper {
 
 
     public Posting toPosting(User user, RequestCreatePosting requestDto) {
-        return new Posting(requestDto.getTitle(),
+        return new Posting(
+                requestDto.getTitle(),
                 user,
-                requestDto.getContents(),
-                requestDto.getPassword());
+                requestDto.getContents());
     }
 }

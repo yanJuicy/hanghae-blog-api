@@ -10,6 +10,7 @@ import com.hanghae.blog.api.comment.dto.ResponseComment;
 import com.hanghae.blog.api.comment.entity.Comment;
 import com.hanghae.blog.api.comment.mapper.CommentMapper;
 import com.hanghae.blog.api.comment.repository.CommentRepository;
+import com.hanghae.blog.api.like.repository.CommentLikeRepository;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
@@ -46,6 +47,7 @@ public class PostingService {
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
     private final CategoryPostingMapService categoryPostingMapService;
+    private final CommentLikeRepository commentLikeRepository;
     private final CategoryPostingMapRepository categoryPostingMapRepository;
 
 
@@ -133,12 +135,29 @@ public class PostingService {
     }
 
     @Transactional
-    public String deletePosting(Long postingId) {
-        postingRepository.findById(postingId)
-                .orElseThrow(
-                        () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
+    public void deletePosting(Long postingId, String username){
+        Optional<Posting> optional = postingRepository.findById(postingId);
+        Posting posting = optional.orElseThrow(
+                () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
+
+        if(!posting.getUser().getUsername().equals(username)){
+            throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
+        }
+        List<String> categories = findCategories(posting);
+
+        List<Comment> comments = commentRepository.findAllByPostingOrderByCreatedAtDesc(posting);
+        for (Comment c : comments) {
+            commentLikeRepository.deleteCommentLikeByComment(c);
+        }
+        //댓글 좋아요 먼저 삭제 -
+        commentRepository.deleteAllByPosting(posting);
+//        //포스트좋아요
+//        for (Posting p : posting){
+//            postingL
+//        }
+        //카테고리
+        categoryPostingMapRepository.deleteAllByPosting(posting);
         postingRepository.deleteById(postingId);
-        return "success";
     }
 
     @Transactional(readOnly = true)

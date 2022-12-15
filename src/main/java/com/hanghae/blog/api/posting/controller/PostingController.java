@@ -92,7 +92,7 @@ public class PostingController {
     @DeleteMapping("/{id}")
     public Response deletePosting(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         String username = userDetails.getUsername();
-        postingService.deletePosting(id);
+        postingService.deletePosting(id,username);
         return new Response (DELETE_POSTING_SUCCESS_MSG);
     }
 
