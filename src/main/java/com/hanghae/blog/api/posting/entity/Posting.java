@@ -50,12 +50,12 @@ public class Posting extends Timestamped {
     @OneToMany(mappedBy = "posting", fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
 
-	public Posting(String title, User user,  String contents) {
-		this.title = title;
-		this.user = user;
-		this.contents = contents;
-
-	}
+    public Posting(String title, User user, String contents, String password) {
+        this.title = title;
+        this.user = user;
+        this.contents = contents;
+        this.password = password;
+    }
 
     public void setContents(String contents) {
         this.contents = contents;

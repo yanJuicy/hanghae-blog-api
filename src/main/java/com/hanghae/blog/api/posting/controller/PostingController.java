@@ -5,13 +5,12 @@ import com.hanghae.blog.api.common.response.PageResponse;
 import com.hanghae.blog.api.common.response.Response;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
+import com.hanghae.blog.api.posting.dto.ResponsePagePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
-import com.hanghae.blog.api.posting.mapper.PostingMapper;
 import com.hanghae.blog.api.posting.service.PostingService;
 import com.hanghae.blog.api.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import static com.hanghae.blog.api.common.response.ResponseMessage.CREATE_POSTING_SUCCESS_MSG;
 import static com.hanghae.blog.api.common.response.ResponseMessage.DELETE_POSTING_SUCCESS_MSG;
@@ -39,7 +36,6 @@ import static com.hanghae.blog.api.common.response.ResponseMessage.UPDATE_POSTIN
 public class PostingController {
 
     private final PostingService postingService;
-    private final PostingMapper postingMapper;
 
     //게시글 등록
     @PostMapping
@@ -67,11 +63,8 @@ public class PostingController {
 
     @GetMapping("/list")
     public PageResponse<ResponsePosting, Posting> findPagePosting(RequestPagePosting requestDto) {
-        Page<Posting> pageResult = postingService.findPagePosting(requestDto);
-        List<String> categoryList = new ArrayList<>();
-        Function<Posting, ResponsePosting> fn = p -> postingMapper.toResponse(p, categoryList,null);
-
-        return new PageResponse<>(READ_PAGING_POSTING_SUCCESS_MSG, pageResult, fn);
+        ResponsePagePosting response = postingService.findPagePosting(requestDto);
+        return new PageResponse<>(READ_PAGING_POSTING_SUCCESS_MSG, response.getPageResult(), response.getResponsePostingDto());
     }
     //선택 게시글 조회
     @GetMapping("/{id}")

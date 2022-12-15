@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,15 +20,13 @@ public class PageResponse<DTO, EN> extends Response {
     private boolean prev, next;
     private List<Integer> pageList;
 
-    public PageResponse(ResponseMessage responseMessage, Page<EN> result, Function<EN, DTO> fn) {
+    public PageResponse(ResponseMessage responseMessage, Page<EN> page, List<DTO> data) {
         super(responseMessage);
-        data = result.stream()
-                .map(fn)
-                .collect(Collectors.toList());
+        this.data = data;
 
-        totalPage = result.getTotalPages();
+        totalPage = page.getTotalPages();
 
-        makePageList(result.getPageable());
+        makePageList(page.getPageable());
     }
 
     private void makePageList(Pageable pageable) {
