@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_POSTING_EXCEPTION_MSG;
 import static com.hanghae.blog.api.common.exception.ExceptionMessage.POSTING_TOKEN_ERROR_MSG;
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.USER_NOT_MATCH_ERROR_MSG;
 
 @Service
 @RequiredArgsConstructor
@@ -104,15 +105,23 @@ public class PostingService {
     }
 
     @Transactional
-    public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting) {
+    public ResponsePosting updatePosting(String username, Long postingId, RequestCreatePosting requestCreatePosting){
         Optional<Posting> optional = postingRepository.findById(postingId);
         Posting posting = optional.orElseThrow(
-                () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg())
-        );
+                () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
+        if(!posting.getUser().getUsername().equals(username)){
+            throw new IllegalArgumentException(USER_NOT_MATCH_ERROR_MSG.getMsg());
+        }
         posting.setContents(requestCreatePosting.getContents());
-
         List<String> categories = findCategories(posting);
-        return postingMapper.toResponse(posting, categories, null);
+
+        List<Comment> comments = commentRepository.findAllByPostingOrderByCreatedAtDesc(posting);
+        List<ResponseComment> commentList = new ArrayList<>();
+        for (Comment c : comments) {
+            commentList.add(commentMapper.toResponse(c));
+        }
+
+        return postingMapper.toResponse(posting, categories, commentList);
     }
 
     public List<String> findCategories(Posting posting) {
