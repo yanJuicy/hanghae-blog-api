@@ -5,6 +5,7 @@ import com.hanghae.blog.api.common.response.PageResponse;
 import com.hanghae.blog.api.common.response.Response;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
+import com.hanghae.blog.api.posting.dto.ResponseOnePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
@@ -65,8 +66,8 @@ public class PostingController {
     }
     //선택 게시글 조회
     @GetMapping("/{id}")
-    public DataResponse<ResponsePosting> findOnePosting(@PathVariable Long id){
-        ResponsePosting response = postingService.findOnePosting(id);
+    public DataResponse<ResponseOnePosting> findOnePosting(@PathVariable Long id){
+        ResponseOnePosting response = postingService.findOnePosting(id);
 
         return new DataResponse<>(READ_POSTING_SUCCESS_MSG, response);
     }

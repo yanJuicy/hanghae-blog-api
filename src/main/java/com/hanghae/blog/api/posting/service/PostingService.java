@@ -1,7 +1,11 @@
 package com.hanghae.blog.api.posting.service;
 
+import com.hanghae.blog.api.comment.dto.ResponseComment;
+import com.hanghae.blog.api.comment.entity.Comment;
+import com.hanghae.blog.api.comment.mapper.CommentMapper;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
+import com.hanghae.blog.api.posting.dto.ResponseOnePosting;
 import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
@@ -29,6 +33,7 @@ public class PostingService {
 
     private final PostingRepository postingRepository;
 	private final PostingMapper postingMapper;
+    private final CommentMapper commentMapper;
     private final UserRepository userRepository;
 
     @Transactional
@@ -59,11 +64,23 @@ public class PostingService {
     }
 
     @Transactional
-    public ResponsePosting findOnePosting(Long id){
+    public ResponseOnePosting findOnePosting(Long id){
         Posting posting = postingRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
-        return postingMapper.toResponse(posting);
+
+        List<List<ResponseComment>> comments = new ArrayList<>();
+        List<Comment> commentList = posting.getCommentList();
+        if(commentList.size() != 0){
+            for(Comment c : commentList){
+                if(c.getCommentDepth() == 0) {
+                    List<ResponseComment> result = commentMapper.toResponseCommentList(c);
+                    comments.add(result);
+                }
+            }
+        };
+
+        return postingMapper.toResponseOnePosting(posting, comments);
     }
     @Transactional
     public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting){
