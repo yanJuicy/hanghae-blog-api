@@ -80,23 +80,22 @@ public class CommentService {
     public ResponseComment createNestedComment(String username, Long postId, Long commentId, RequestComment requestComment){
         Optional<User> user = userRepository.findByUsername(username);
 
-        commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(NO_EXIST_COMMENT_EXCEPTION_MSG.getMsg()));
         Posting posting = postingRepository.findById(postId)
                 .orElseThrow(() -> new NullPointerException(NO_EXIST_POSTING_EXCEPTION_MSG.getMsg()));
 
         Comment newNestedComment;
-        Optional<Integer> maxCommentDepth = commentRepository.findWithComment(commentId);
-
-        if(maxCommentDepth.isEmpty()){
-             newNestedComment = commentMapper.toNestedComment(user.get(), posting, requestComment, commentId, 1);
+        if (comment.getCommentGroup() == null) {
+            newNestedComment = commentMapper.toNestedComment(user.get(), posting, requestComment, commentId, 1, commentId);
         }else{
-            newNestedComment = commentMapper.toNestedComment(user.get(), posting, requestComment, commentId, maxCommentDepth.get() + 1);
+            newNestedComment = commentMapper.toNestedComment(user.get(), posting, requestComment, comment.getCommentGroup(), comment.getCommentDepth() + 1, commentId);
         }
 
         commentRepository.save(newNestedComment);
 
         return commentMapper.toResponse(newNestedComment);
     }
+
 
 
 }
