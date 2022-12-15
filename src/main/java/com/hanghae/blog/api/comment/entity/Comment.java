@@ -2,6 +2,8 @@ package com.hanghae.blog.api.comment.entity;
 
 import com.hanghae.blog.api.common.entity.Timestamped;
 import com.hanghae.blog.api.like.entity.CommentLike;
+import com.hanghae.blog.api.posting.entity.Posting;
+import com.hanghae.blog.api.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +33,11 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "username")
-    private String username; // user로 변경 될 곳
 //    @Column(nullable = false, name = "username")
-//    private User user;
+//    private String username; // user로 변경 될 곳
+//    @Column(nullable = false, name = "username")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     @Column(nullable = false)
     private String content;
@@ -41,8 +45,8 @@ public class Comment extends Timestamped {
     @Column(columnDefinition = "bigint default 0")
     private Long likeCount;
 
-    @Column(nullable = false)
-    private Long postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Posting posting;
 
     @Column(nullable = false)
     private int commentDepth;

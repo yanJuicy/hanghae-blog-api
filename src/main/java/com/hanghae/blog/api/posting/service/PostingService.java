@@ -9,6 +9,8 @@ import com.hanghae.blog.api.posting.dto.ResponsePosting;
 import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.posting.mapper.PostingMapper;
 import com.hanghae.blog.api.posting.repository.PostingRepository;
+import com.hanghae.blog.api.user.entity.User;
+import com.hanghae.blog.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,15 +32,17 @@ public class PostingService {
     private static final String SORT_BY = "createdAt";
 
     private final PostingRepository postingRepository;
-    private final PostingMapper postingMapper;
+	  private final PostingMapper postingMapper;
+    private final UserRepository userRepository;
     private final CategoryService categoryService;
     private final CategoryPostingMapService categoryPostingMapService;
-
-
+    
     @Transactional
-    public ResponsePosting create(RequestCreatePosting requestDto) {
-        // 포스팅 저장
-        Posting posting = postingMapper.toPosting(requestDto);
+    public ResponsePosting create(String username, RequestCreatePosting requestDto) {
+        Optional<User> user = userRepository.findByUsername(username);
+		Posting posting = postingMapper.toPosting(user.get(), requestDto);
+
+
         Posting savedPosting = postingRepository.save(posting);
 
         // 카테고리 저장
