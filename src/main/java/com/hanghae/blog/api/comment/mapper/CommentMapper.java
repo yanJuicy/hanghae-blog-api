@@ -7,6 +7,9 @@ import com.hanghae.blog.api.posting.entity.Posting;
 import com.hanghae.blog.api.user.entity.User;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class CommentMapper {
 
@@ -21,6 +24,20 @@ public class CommentMapper {
                 .commentGroup(comment.getCommentGroup())
                 .commentRef(comment.getCommentRef())
                 .build();
+    }
+
+    public List<ResponseComment> toResponseCommentList(Comment comment){
+        List<ResponseComment> result = new ArrayList<>();
+        result.add(toResponse(comment));
+
+        List<Comment> nestedCommentList = comment.getNestedCommentList();
+        if (nestedCommentList.size() != 0) {
+            for (Comment c : nestedCommentList) {
+                System.out.println(c.getId());
+                result.addAll(toResponseCommentList(c));
+            }
+        }
+        return result;
     }
 
     public Comment toDepthZeroComment(User user, Posting posting, RequestComment requestCreateCommentDto){
