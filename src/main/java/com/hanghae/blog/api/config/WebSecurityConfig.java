@@ -46,7 +46,7 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/api/user/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/user/**").permitAll()
                 .antMatchers(HttpMethod.GET, new String[]{"/api/postings/list", "/api/postings/{id}"}).permitAll()
                 .antMatchers(HttpMethod.GET,"/api/postings").permitAll()
                 .anyRequest().authenticated()

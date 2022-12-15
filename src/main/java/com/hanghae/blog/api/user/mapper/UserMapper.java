@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import static com.hanghae.blog.api.common.exception.ExceptionMessage.ADMIN_TOKEN_MISMATCH_ERROR_MSG;
+
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
@@ -21,7 +23,7 @@ public class UserMapper {
         UserRoleEnum role = UserRoleEnum.USER;
         if (requestCreateUser.isAdmin()) {
             if (!requestCreateUser.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+                throw new IllegalArgumentException(ADMIN_TOKEN_MISMATCH_ERROR_MSG.getMsg());
             }
             role = UserRoleEnum.ADMIN;
         }
