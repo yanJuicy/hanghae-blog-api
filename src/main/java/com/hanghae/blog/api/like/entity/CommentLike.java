@@ -1,5 +1,6 @@
 package com.hanghae.blog.api.like.entity;
 
+import com.hanghae.blog.api.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,9 +8,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
@@ -25,7 +28,7 @@ public class CommentLike {
     @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
-    private Long commentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Comment comment;
 
 }
