@@ -1,7 +1,7 @@
 package com.hanghae.blog.api.security;
 
-import com.hanghae.blog.api.user.entity.User;
-import com.hanghae.blog.api.user.repository.UserRepository;
+import com.hanghae.blog.api.domain.user.repository.UserRepository;
+import com.hanghae.blog.api.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

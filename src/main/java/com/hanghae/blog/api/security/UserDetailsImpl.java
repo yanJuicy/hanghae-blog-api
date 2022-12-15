@@ -1,8 +1,8 @@
 package com.hanghae.blog.api.security;
 
 
-import com.hanghae.blog.api.user.entity.User;
-import com.hanghae.blog.api.user.entity.UserRoleEnum;
+import com.hanghae.blog.api.domain.user.entity.User;
+import com.hanghae.blog.api.domain.user.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
