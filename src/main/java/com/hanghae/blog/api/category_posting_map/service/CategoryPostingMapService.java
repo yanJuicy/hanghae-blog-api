@@ -34,4 +34,6 @@ public class CategoryPostingMapService {
         return categoryList;
     }
 
+    public void deleteById(Posting posting) {
+    }
 }

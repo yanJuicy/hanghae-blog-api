@@ -10,4 +10,5 @@ public interface CategoryPostingMapRepository extends JpaRepository<CategoryPost
 
     List<CategoryPostingMap> findAllByPosting(Posting posting);
 
+    void deleteAllByPosting(Posting posting);
 }
