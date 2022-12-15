@@ -24,9 +24,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.hanghae.blog.api.common.response.ResponseMessage.CREATE_POSTING_SUCCESS_MSG;
-import static com.hanghae.blog.api.common.response.ResponseMessage.DELETE_COMMENT_SUCCESS_MSG;
+import static com.hanghae.blog.api.common.response.ResponseMessage.DELETE_POSTING_SUCCESS_MSG;
 import static com.hanghae.blog.api.common.response.ResponseMessage.READ_PAGING_POSTING_SUCCESS_MSG;
 import static com.hanghae.blog.api.common.response.ResponseMessage.READ_POSTING_SUCCESS_MSG;
+import static com.hanghae.blog.api.common.response.ResponseMessage.UPDATE_POSTING_SUCCESS_MSG;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/postings")
@@ -59,24 +60,24 @@ public class PostingController {
 
         return new PageResponse<>(READ_PAGING_POSTING_SUCCESS_MSG, pageResult, fn);
     }
-
+    //선택 게시글 조회
     @GetMapping("/{id}")
     public DataResponse<ResponsePosting> findOnePosting(@PathVariable Long id){
         ResponsePosting response = postingService.findOnePosting(id);
 
         return new DataResponse<>(READ_POSTING_SUCCESS_MSG, response);
     }
-
+    //게시글 수정
     @PutMapping("/{id}")
     public DataResponse<ResponsePosting> updatePosting(@PathVariable Long id, @RequestBody RequestCreatePosting requestCreatePosting) {
         ResponsePosting response = postingService.updatePosting(id, requestCreatePosting);
-        return new DataResponse<>(CREATE_POSTING_SUCCESS_MSG, response);
+        return new DataResponse<>(UPDATE_POSTING_SUCCESS_MSG, response);
     }
-
+    //게시글 삭제
     @DeleteMapping("/{id}")
     public Response deletePosting(@PathVariable Long id) {
         postingService.deletePosting(id);
-        return new Response (DELETE_COMMENT_SUCCESS_MSG); //Response 메시지 수정시 바꿀 예정
+        return new Response (DELETE_POSTING_SUCCESS_MSG);
     }
 
 }
