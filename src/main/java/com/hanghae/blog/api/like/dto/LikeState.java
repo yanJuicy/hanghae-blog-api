@@ -1,4 +1,4 @@
-package com.hanghae.blog.api.like.dto.comments;
+package com.hanghae.blog.api.like.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

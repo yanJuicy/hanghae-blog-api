@@ -1,8 +1,8 @@
 package com.hanghae.blog.api.like.controller;
 
 import com.hanghae.blog.api.common.response.DataResponse;
-import com.hanghae.blog.api.like.dto.comments.LikeState;
-import com.hanghae.blog.api.like.service.CommentLikeService;
+import com.hanghae.blog.api.like.dto.LikeState;
+import com.hanghae.blog.api.like.service.LikeService;
 import com.hanghae.blog.api.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,17 +16,17 @@ import static com.hanghae.blog.api.common.response.ResponseMessage.CREATE_COMMEN
 import static com.hanghae.blog.api.common.response.ResponseMessage.DELETE_COMMENT_LIKE_SUCCESS_MSG;
 
 @RestController
-@RequestMapping("/api/posts/comments")
+@RequestMapping("/api/posts/{postId}")
 @RequiredArgsConstructor
-public class CommentLikeController {
+public class LikeController {
 
-    private final CommentLikeService commentLikeService;
+    private final LikeService likeService;
 
-    @PostMapping("/{commentId}/like")
+    @PostMapping("/comments/{commentId}/like")
     public DataResponse<LikeState> updateLikeState(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long commentId, @RequestBody LikeState likeState) {
         String username = userDetails.getUsername();
 
-        boolean result = commentLikeService.updateLikeState(username, commentId, likeState.isLikeState());
+        boolean result = likeService.updateLikeState(username, commentId, likeState.isLikeState());
 
         if (result) {
             return new DataResponse<>(CREATE_COMMENT_LIKE_SUCCESS_MSG, new LikeState(true));

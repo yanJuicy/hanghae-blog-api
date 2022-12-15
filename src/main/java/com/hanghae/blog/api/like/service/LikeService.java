@@ -16,7 +16,7 @@ import static com.hanghae.blog.api.common.exception.ExceptionMessage.NO_EXIST_CO
 
 @Service
 @RequiredArgsConstructor
-public class CommentLikeService {
+public class LikeService {
 
     private final CommentLikeRepository commentLikeRepository;
     private final CommentRepository commentRepository;
@@ -55,7 +55,7 @@ public class CommentLikeService {
         changeLikeCount = comment.getLikeCount() + 1;  // 댓글 좋아요 카운트 +1
         comment.updateLikeCount(changeLikeCount);
 
-        CommentLike newCommentLike = commentLikeMapper.toCommentLike(username, commentId);
+        CommentLike newCommentLike = commentLikeMapper.toCommentLike(username, comment);
         commentLikeRepository.save(newCommentLike);
 
         return true;

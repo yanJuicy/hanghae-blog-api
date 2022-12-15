@@ -1,7 +1,7 @@
 package com.hanghae.blog.api.like.exception;
 
 import com.hanghae.blog.api.common.exception.ExceptionResponse;
-import com.hanghae.blog.api.like.controller.CommentLikeController;
+import com.hanghae.blog.api.like.controller.LikeController;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@RestControllerAdvice(assignableTypes = CommentLikeController.class)
+@RestControllerAdvice(assignableTypes = LikeController.class)
 public class CommentLikeExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
