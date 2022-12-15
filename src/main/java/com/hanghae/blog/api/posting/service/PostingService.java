@@ -1,7 +1,10 @@
 package com.hanghae.blog.api.posting.service;
 
 import com.hanghae.blog.api.category.entity.Category;
+import com.hanghae.blog.api.category.repository.CategoryRepository;
 import com.hanghae.blog.api.category.service.CategoryService;
+import com.hanghae.blog.api.category_posting_map.entity.CategoryPostingMap;
+import com.hanghae.blog.api.category_posting_map.repository.CategoryPostingMapRepository;
 import com.hanghae.blog.api.category_posting_map.service.CategoryPostingMapService;
 import com.hanghae.blog.api.posting.dto.RequestCreatePosting;
 import com.hanghae.blog.api.posting.dto.RequestPagePosting;
@@ -32,15 +35,17 @@ public class PostingService {
     private static final String SORT_BY = "createdAt";
 
     private final PostingRepository postingRepository;
-	  private final PostingMapper postingMapper;
+    private final PostingMapper postingMapper;
     private final UserRepository userRepository;
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
     private final CategoryPostingMapService categoryPostingMapService;
-    
+    private final CategoryPostingMapRepository categoryPostingMapRepository;
+
     @Transactional
     public ResponsePosting create(String username, RequestCreatePosting requestDto) {
         Optional<User> user = userRepository.findByUsername(username);
-		Posting posting = postingMapper.toPosting(user.get(), requestDto);
+        Posting posting = postingMapper.toPosting(user.get(), requestDto);
 
 
         Posting savedPosting = postingRepository.save(posting);
@@ -80,8 +85,9 @@ public class PostingService {
 
         return postingMapper.toResponse(posting, categories);
     }
+
     @Transactional
-    public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting){
+    public ResponsePosting updatePosting(Long postingId, RequestCreatePosting requestCreatePosting) {
         Optional<Posting> optional = postingRepository.findById(postingId);
         Posting posting = optional.orElseThrow(
                 () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg())
@@ -101,11 +107,33 @@ public class PostingService {
     }
 
     @Transactional
-    public String deletePosting(Long postingId){
+    public String deletePosting(Long postingId) {
         postingRepository.findById(postingId)
                 .orElseThrow(
                         () -> new IllegalArgumentException(POSTING_TOKEN_ERROR_MSG.getMsg()));
         postingRepository.deleteById(postingId);
         return "success";
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponsePosting> findPostingsByCategory(String categoryName) {
+        Optional<Category> foundCategory = categoryRepository.findByName(categoryName);
+        if (foundCategory.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<CategoryPostingMap> categoryPostingMapList = categoryPostingMapRepository.findAllByCategory(foundCategory.get());
+        List<Posting> postingList = categoryPostingMapList.stream()
+                .map(e -> e.getPosting())
+                .collect(Collectors.toList());
+
+        List<ResponsePosting> responseList = new ArrayList<>();
+
+        for (Posting posting : postingList) {
+            List<String> categoriesInPosing = findCategories(posting);
+            responseList.add(postingMapper.toResponse(posting, categoriesInPosing));
+        }
+
+        return responseList;
     }
 }

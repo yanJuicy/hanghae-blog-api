@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -53,6 +54,13 @@ public class PostingController {
     @GetMapping
     public DataResponse<List<ResponsePosting>> findAllPosting() {
         List<ResponsePosting> response = postingService.findAllPosting();
+
+        return new DataResponse<>(READ_POSTING_SUCCESS_MSG, response);
+    }
+
+    @GetMapping(params = "category")
+    public DataResponse<List<ResponsePosting>> findAllPosting(@RequestParam String category) {
+        List<ResponsePosting> response = postingService.findPostingsByCategory(category);
 
         return new DataResponse<>(READ_POSTING_SUCCESS_MSG, response);
     }
